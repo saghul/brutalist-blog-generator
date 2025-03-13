@@ -1,14 +1,13 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
-// 
-// Swift Argument Parser
-// https://swiftpackageindex.com/apple/swift-argument-parser/documentation
-
 import ArgumentParser
 
 @main
-struct mwc: ParsableCommand {
-    mutating func run() throws {
-        print("Hello, world!")
-    }
+struct MWC: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        commandName: "mwc",
+        abstract: "A static website generator",
+        subcommands: [
+            InitCommand.self,
+            BuildCommand.self
+        ]
+    )
 }
