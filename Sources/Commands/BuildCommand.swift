@@ -1,4 +1,5 @@
 import ArgumentParser
+import Foundation
 
 struct BuildCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
@@ -8,6 +9,24 @@ struct BuildCommand: ParsableCommand {
 
     func run() throws {
         print("Building website...")
-        // Add build logic here
+
+        do {
+            let filePath = "README.md"
+
+            // Parse document
+            let document = try Document.parse(path: filePath)
+
+            // Convert to HTML
+            let html = document.toHtml()
+
+            // Save to file
+            let outputPath = filePath.replacingOccurrences(of: ".md", with: ".html")
+            try html.write(toFile: outputPath, atomically: true, encoding: .utf8)
+
+            print("Successfully generated HTML at: \(outputPath)")
+        } catch {
+            print("Error: \(error)")
+            throw error
+        }
     }
 }
