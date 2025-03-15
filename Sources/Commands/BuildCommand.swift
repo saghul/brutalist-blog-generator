@@ -24,6 +24,9 @@ struct BuildCommand: ParsableCommand {
             try html.write(toFile: outputPath, atomically: true, encoding: .utf8)
 
             print("Successfully generated HTML at: \(outputPath)")
+            print("Title: \(document.title)")
+            print("Date: \(document.date)")
+            print("Slug: \(document.slug)")
         } catch {
             print("Error: \(error)")
             throw error
