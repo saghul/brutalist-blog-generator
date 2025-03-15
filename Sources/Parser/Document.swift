@@ -2,7 +2,7 @@ import Foundation
 import Markdown
 import Yams
 
-public class Document {
+public struct Document {
     private let content: Markdown.Document
     private let metadata: DocumentMetadata?
 
@@ -46,13 +46,13 @@ public class Document {
     }
 }
 
-public struct DocumentMetadata {
+struct DocumentMetadata {
     let title: String?
     let date: String?
     let slug: String?
 }
 
-private func parseMetadata(_ yaml: String?) throws -> DocumentMetadata {
+func parseMetadata(_ yaml: String?) throws -> DocumentMetadata {
     let yaml = try Yams.load(yaml: yaml ?? "") as? [String: String]
 
     let title = yaml?["title"]
