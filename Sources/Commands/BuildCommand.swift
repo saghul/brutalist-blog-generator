@@ -31,9 +31,9 @@ struct BuildCommand: ParsableCommand {
 
     private func processFile(at path: String) throws {
         let document = try Document.parse(path: path)
-        //print("Title: \(document.title)")
-        //print("Date: \(document.date)")
-        //print("Slug: \(document.slug)")
+        print("Title: \(document.title)")
+        print("Date: \(document.date)")
+        print("Slug: \(document.slug)")
 
         let directoryURL = URL(fileURLWithPath: "build")
 
@@ -46,7 +46,7 @@ struct BuildCommand: ParsableCommand {
         let fileManager = FileManager.default
         try fileManager.createDirectory(at: outputDirUrl, withIntermediateDirectories: true, attributes: nil)
         let outputUrl = outputDirUrl
-            .appendingPathComponent(try document.slug)
+            .appendingPathComponent(document.slug)
             .appendingPathExtension("html")
 
         let html = document.toHtml()

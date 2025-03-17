@@ -1,20 +1,22 @@
 import Foundation
 import Markdown
-import Yams
 
 public enum DocumentError: Error {
-    case invalidSlug(String)
+    case missingTitle
+    case invalidSlug
 }
 
 public struct Document {
-    private static let slugSafeCharacters = CharacterSet(charactersIn: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-")
-
     private let content: Markdown.Document
     private let metadata: DocumentMetadata
+    private let _title: String
+    private let _slug: String
 
-    private init(content: Markdown.Document, metadata: DocumentMetadata) {
+    private init(content: Markdown.Document, metadata: DocumentMetadata, title: String, slug: String) {
         self.content = content
         self.metadata = metadata
+        self._title = title
+        self._slug = slug
     }
 
     public static func parse(path: String) throws -> Document {
@@ -27,35 +29,29 @@ public struct Document {
         let document = Markdown.Document(parsing: components.content)
 
         // Parse metadata
-        let metadata = try parseMetadata(components.yaml)
+        let metadata = try DocumentMetadata.parse(data: components.yaml)
 
-        return Document(content: document, metadata: metadata)
+        // Extract title
+        let title = metadata.title ?? document.getTitle() ?? ""
+        guard !title.isEmpty else {
+            throw DocumentError.missingTitle
+        }
+
+        // Extract slug
+        let slug = slugify(metadata.slug ?? title)
+        guard let validSlug = slug else {
+            throw DocumentError.invalidSlug
+        }
+
+        return Document(content: document, metadata: metadata, title: title, slug: validSlug)
     }
 
     public func toHtml() -> String {
         return HTMLFormatter.format(content)
     }
 
-    private func slugify(_ string: String) throws -> String {
-        // Adapted from: https://github.com/twostraws/SwiftSlug
-
-        var result: String? = nil
-        if let latin = string.applyingTransform(StringTransform("Any-Latin; Latin-ASCII; Lower;"), reverse: false) {
-            let urlComponents = latin.components(separatedBy: Document.slugSafeCharacters.inverted)
-            result = urlComponents.filter { $0 != "" }.joined(separator: "-")
-        }
-
-        if let result = result {
-            if result.count > 0 {
-                return result
-            }
-        }
-
-        throw DocumentError.invalidSlug(string)
-    }
-
     var title: String {
-        return metadata.title
+        return self._title
     }
 
     var date: Date {
@@ -63,51 +59,49 @@ public struct Document {
     }
 
     var slug: String {
-        get throws {
-            if metadata.slug.isEmpty {
-                return try slugify(title)
-            }
+        return self._slug
+    }
+}
 
-            return try slugify(metadata.slug)
+// Utilities
+extension Document {
+    static func splitFrontMatter(from content: String) -> (yaml: String, content: String) {
+        let pattern = "^---\\n([\\s\\S]*?)\\n---\\n([\\s\\S]*$)"
+
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []),
+            let match = regex.firstMatch(
+                in: content,
+                options: [],
+                range: NSRange(content.startIndex..., in: content)
+            ) else {
+            return ("", content)
         }
-    }
-}
 
-struct DocumentMetadata {
-    let title: String
-    let date: Date
-    let slug: String
-}
+        let yamlRange = Range(match.range(at: 1), in: content)!
+        let contentRange = Range(match.range(at: 2), in: content)!
 
-func parseMetadata(_ yaml: String?) throws -> DocumentMetadata {
-    let yaml = try Yams.load(yaml: yaml ?? "") as? [String: String]
-
-    let title = yaml?["title"] ?? ""
-    let slug = yaml?["slug"] ?? ""
-    let dateStr = yaml?["date"] ?? ""
-    let formatter = ISO8601DateFormatter()
-    let date = formatter.date(from: dateStr) ?? Date()
-
-    return DocumentMetadata(title: title, date: date, slug: slug)
-}
-
-func splitFrontMatter(from content: String) -> (yaml: String, content: String) {
-    let pattern = "^---\\n([\\s\\S]*?)\\n---\\n([\\s\\S]*$)"
-
-    guard let regex = try? NSRegularExpression(pattern: pattern, options: []),
-          let match = regex.firstMatch(
-            in: content,
-            options: [],
-            range: NSRange(content.startIndex..., in: content)
-          ) else {
-        return ("", content)
+        return (
+            String(content[yamlRange]).trimmingCharacters(in: .whitespacesAndNewlines),
+            String(content[contentRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+        )
     }
 
-    let yamlRange = Range(match.range(at: 1), in: content)!
-    let contentRange = Range(match.range(at: 2), in: content)!
+    private static let slugSafeCharacters = CharacterSet(charactersIn: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-")
 
-    return (
-        String(content[yamlRange]).trimmingCharacters(in: .whitespacesAndNewlines),
-        String(content[contentRange]).trimmingCharacters(in: .whitespacesAndNewlines)
-    )
+    static func slugify(_ string: String) -> String? {
+        // Adapted from: https://github.com/twostraws/SwiftSlug
+
+        var result: String? = nil
+        if let latin = string.applyingTransform(StringTransform("Any-Latin; Latin-ASCII; Lower;"), reverse: false) {
+            let urlComponents = latin.components(separatedBy: slugSafeCharacters.inverted)
+            result = urlComponents.filter { $0 != "" }.joined(separator: "-")
+        }
+
+        guard let result = result, !result.isEmpty else {
+            return nil
+        }
+
+        return result
+    }
+
 }
