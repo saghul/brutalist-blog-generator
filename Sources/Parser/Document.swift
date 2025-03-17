@@ -4,9 +4,9 @@ import Yams
 
 public struct Document {
     private let content: Markdown.Document
-    private let metadata: DocumentMetadata?
+    private let metadata: DocumentMetadata
 
-    private init(content: Markdown.Document, metadata: DocumentMetadata? = nil) {
+    private init(content: Markdown.Document, metadata: DocumentMetadata) {
         self.content = content
         self.metadata = metadata
     }
@@ -20,13 +20,15 @@ public struct Document {
         // Parse the Markdown document
         let document = Markdown.Document(parsing: components.content)
 
+        // Parse metadata
+        var metadata: DocumentMetadata
         do {
-            let metadata = try parseMetadata(components.yaml)
-            return Document(content: document, metadata: metadata)
+            metadata = try parseMetadata(components.yaml)
         } catch {
-            // If YAML parsing fails, treat entire file as markdown without metadata
-            return Document(content: document, metadata: nil)
+            metadata = DocumentMetadata(title: "", date: "", slug: "")
         }
+
+        return Document(content: document, metadata: metadata)
     }
 
     public func toHtml() -> String {
@@ -34,30 +36,30 @@ public struct Document {
     }
 
     var title: String {
-        return metadata?.title ?? ""
+        return metadata.title
     }
 
     var date: String {
-        return metadata?.date ?? ""
+        return metadata.date
     }
 
     var slug: String {
-        return metadata?.slug ?? ""
+        return metadata.slug
     }
 }
 
 struct DocumentMetadata {
-    let title: String?
-    let date: String?
-    let slug: String?
+    let title: String
+    let date: String
+    let slug: String
 }
 
 func parseMetadata(_ yaml: String?) throws -> DocumentMetadata {
     let yaml = try Yams.load(yaml: yaml ?? "") as? [String: String]
 
-    let title = yaml?["title"]
-    let date = yaml?["date"]
-    let slug = yaml?["slug"]
+    let title = yaml?["title"] ?? ""
+    let date = yaml?["date"] ?? ""
+    let slug = yaml?["slug"] ?? ""
 
     return DocumentMetadata(title: title, date: date, slug: slug)
 }
