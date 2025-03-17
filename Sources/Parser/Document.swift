@@ -21,12 +21,7 @@ public struct Document {
         let document = Markdown.Document(parsing: components.content)
 
         // Parse metadata
-        var metadata: DocumentMetadata
-        do {
-            metadata = try parseMetadata(components.yaml)
-        } catch {
-            metadata = DocumentMetadata(title: "", date: "", slug: "")
-        }
+        let metadata = try parseMetadata(components.yaml)
 
         return Document(content: document, metadata: metadata)
     }
@@ -39,7 +34,7 @@ public struct Document {
         return metadata.title
     }
 
-    var date: String {
+    var date: Date {
         return metadata.date
     }
 
@@ -50,7 +45,7 @@ public struct Document {
 
 struct DocumentMetadata {
     let title: String
-    let date: String
+    let date: Date
     let slug: String
 }
 
@@ -58,8 +53,10 @@ func parseMetadata(_ yaml: String?) throws -> DocumentMetadata {
     let yaml = try Yams.load(yaml: yaml ?? "") as? [String: String]
 
     let title = yaml?["title"] ?? ""
-    let date = yaml?["date"] ?? ""
     let slug = yaml?["slug"] ?? ""
+    let dateStr = yaml?["date"] ?? ""
+    let formatter = ISO8601DateFormatter()
+    let date = formatter.date(from: dateStr) ?? Date()
 
     return DocumentMetadata(title: title, date: date, slug: slug)
 }
