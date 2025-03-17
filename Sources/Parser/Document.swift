@@ -2,7 +2,13 @@ import Foundation
 import Markdown
 import Yams
 
+public enum DocumentError: Error {
+    case invalidSlug(String)
+}
+
 public struct Document {
+    private static let slugSafeCharacters = CharacterSet(charactersIn: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-")
+
     private let content: Markdown.Document
     private let metadata: DocumentMetadata
 
@@ -30,6 +36,24 @@ public struct Document {
         return HTMLFormatter.format(content)
     }
 
+    private func slugify(_ string: String) throws -> String {
+        // Adapted from: https://github.com/twostraws/SwiftSlug
+
+        var result: String? = nil
+        if let latin = string.applyingTransform(StringTransform("Any-Latin; Latin-ASCII; Lower;"), reverse: false) {
+            let urlComponents = latin.components(separatedBy: Document.slugSafeCharacters.inverted)
+            result = urlComponents.filter { $0 != "" }.joined(separator: "-")
+        }
+
+        if let result = result {
+            if result.count > 0 {
+                return result
+            }
+        }
+
+        throw DocumentError.invalidSlug(string)
+    }
+
     var title: String {
         return metadata.title
     }
@@ -39,7 +63,13 @@ public struct Document {
     }
 
     var slug: String {
-        return metadata.slug
+        get throws {
+            if metadata.slug.isEmpty {
+                return try slugify(title)
+            }
+
+            return try slugify(metadata.slug)
+        }
     }
 }
 

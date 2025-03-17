@@ -46,7 +46,7 @@ struct BuildCommand: ParsableCommand {
         let fileManager = FileManager.default
         try fileManager.createDirectory(at: outputDirUrl, withIntermediateDirectories: true, attributes: nil)
         let outputUrl = outputDirUrl
-            .appendingPathComponent(document.slug)
+            .appendingPathComponent(try document.slug)
             .appendingPathExtension("html")
 
         let html = document.toHtml()
