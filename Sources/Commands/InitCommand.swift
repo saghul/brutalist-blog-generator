@@ -6,7 +6,7 @@ struct InitCommand: ParsableCommand {
         abstract: "Initialize a new website project"
     )
 
-    func run() throws {
+    func run() {
         print("Initializing new website project...")
         // Add initialization logic here
     }

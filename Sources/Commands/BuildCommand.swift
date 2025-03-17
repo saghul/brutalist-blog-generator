@@ -7,7 +7,7 @@ struct BuildCommand: ParsableCommand {
         abstract: "Build the website"
     )
 
-    func run() throws {
+    func run() {
         print("Building website...")
 
         let fileManager = FileManager.default
