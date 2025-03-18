@@ -44,19 +44,16 @@ struct BuildCommand: ParsableCommand {
         print("Date: \(document.date)")
         print("Slug: \(document.slug)")
 
-        let directoryURL = URL(fileURLWithPath: "build")
+        let outputDir = URL(fileURLWithPath: "build")
 
         let calendar = Calendar.current
         let year = calendar.component(.year, from: document.date)
         let month = calendar.component(.month, from: document.date)
-        let outputDirUrl = directoryURL
-            .appendingPathComponent(String(format: "%04d", year))
-            .appendingPathComponent(String(format: "%02d", month))
+        let fileName = String(format: "%04d-%02d-%@.html", year, month, document.slug)
         let fileManager = FileManager.default
-        try fileManager.createDirectory(at: outputDirUrl, withIntermediateDirectories: true, attributes: nil)
-        let outputUrl = outputDirUrl
-            .appendingPathComponent(document.slug)
-            .appendingPathExtension("html")
+        try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: true, attributes: nil)
+        let outputUrl = outputDir
+            .appendingPathComponent(fileName)
 
         let html = document.toHtml()
         try html.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
