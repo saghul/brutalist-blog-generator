@@ -35,16 +35,16 @@ struct BuildCommand: ParsableCommand {
 
         // Process each document
         for document in documents {
-            try processDocument(document: document)
+            try processPost(document: document)
         }
     }
 
-    private func processDocument(document: Document) throws {
+    private func processPost(document: Document) throws {
         print("Title: \(document.title)")
         print("Date: \(document.date)")
         print("Slug: \(document.slug)")
 
-        let outputDir = URL(fileURLWithPath: "build")
+        let outputDir = URL(fileURLWithPath: "build/posts")
 
         let calendar = Calendar.current
         let year = calendar.component(.year, from: document.date)
