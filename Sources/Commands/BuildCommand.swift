@@ -7,11 +7,12 @@ struct BuildCommand: ParsableCommand {
         abstract: "Build the website"
     )
 
-    func run() {
+    func run() throws {
         print("Building website...")
 
         let fileManager = FileManager.default
         let directoryURL = URL(fileURLWithPath: "www/posts")
+        var documents: [Document] = []
 
         if let enumerator = fileManager.enumerator(atPath: directoryURL.path) {
             while let filePath = enumerator.nextObject() as? String {
@@ -19,18 +20,26 @@ struct BuildCommand: ParsableCommand {
                     let fullPathUrl = directoryURL.appendingPathComponent(filePath)
                     print("Found file: \(fullPathUrl.path)")
                     do {
-                        try processFile(at: fullPathUrl.path)
+                        let document = try Document.parse(path: fullPathUrl.path)
+                        documents.append(document)
                     } catch {
                         print("Failed to process file: \(fullPathUrl.path)")
-                        print(error)
+                        throw error
                     }
                 }
             }
         }
+
+        // Sort documents by date
+        documents.sort { $0.date > $1.date }
+
+        // Process each document
+        for document in documents {
+            try processDocument(document: document)
+        }
     }
 
-    private func processFile(at path: String) throws {
-        let document = try Document.parse(path: path)
+    private func processDocument(document: Document) throws {
         print("Title: \(document.title)")
         print("Date: \(document.date)")
         print("Slug: \(document.slug)")
