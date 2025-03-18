@@ -13,6 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
+      - uses: actions/checkout@v4
       - uses: swift-actions/setup-swift@v2
       - run: swift --version
       - run: make
