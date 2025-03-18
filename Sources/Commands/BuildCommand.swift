@@ -4,12 +4,10 @@ import Foundation
 struct BuildCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "build",
-        abstract: "Build the website"
+        abstract: "Build the blog"
     )
 
     func run() throws {
-        print("Building website...")
-
         let fileManager = FileManager.default
         let directoryURL = URL(fileURLWithPath: "www/posts")
         var documents: [Document] = []

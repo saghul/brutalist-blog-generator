@@ -3,11 +3,11 @@ import ArgumentParser
 struct InitCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "init",
-        abstract: "Initialize a new website project"
+        abstract: "Initialize a new blog"
     )
 
     func run() {
-        print("Initializing new website project...")
-        // Add initialization logic here
+        print("Initializing new blog...")
+        // TODO: Add initialization logic here
     }
 }

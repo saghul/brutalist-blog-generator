@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "mwc",
+    name: "bbg",
     platforms: [
         .macOS(.v12)
     ],
@@ -16,7 +16,7 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "mwc",
+            name: "bbg",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Markdown", package: "swift-markdown"),
