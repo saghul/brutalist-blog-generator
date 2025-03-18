@@ -1,6 +1,16 @@
 import Foundation
 
 struct SiteBuilder {
+    private static let templates = [
+        "index": String(decoding: Data(PackageResources.index_html), as: UTF8.self),
+        "post": String(decoding: Data(PackageResources.post_html), as: UTF8.self),
+    ]
+    private let templateEngine: TemplateEngine
+
+    init() {
+        templateEngine = TemplateEngine(templates: SiteBuilder.templates)
+    }
+
     func build() throws {
         let fileManager = FileManager.default
         let directoryURL = URL(fileURLWithPath: "www/posts")
@@ -55,7 +65,7 @@ struct SiteBuilder {
                 ]
             }
         ]
-        let finalHtml = try renderIndex(context: context)
+        let finalHtml = try templateEngine.renderTemplate(name: "index", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")
@@ -77,7 +87,7 @@ struct SiteBuilder {
                 "content": html
             ]
         ]
-        let finalHtml = try renderPost(context: context)
+        let finalHtml = try templateEngine.renderTemplate(name: "post", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")
