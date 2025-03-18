@@ -43,7 +43,7 @@ public struct Document {
             throw DocumentError.invalidSlug
         }
 
-        return Document(content: document, metadata: metadata, title: title, slug: validSlug)
+        return Document(content: document.deleteTitle(), metadata: metadata, title: title, slug: validSlug)
     }
 
     public func toHtml() -> String {

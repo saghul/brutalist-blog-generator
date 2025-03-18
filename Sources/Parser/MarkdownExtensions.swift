@@ -1,5 +1,16 @@
 import Markdown
 
+struct TitleDeleter: MarkupRewriter {
+    mutating func visitHeading(_ heading: Heading) -> Markup? {
+        if heading.level == 1 {
+            return nil
+        }
+
+        return heading
+    }
+}
+
+
 extension Markdown.Document {
     func getTitle() -> String? {
         guard let heading = children.first(where: { $0 is Heading }) as? Heading else {
@@ -7,5 +18,10 @@ extension Markdown.Document {
         }
 
         return heading.plainText
+    }
+
+    func deleteTitle() -> Markdown.Document {
+        var rewriter = TitleDeleter()
+        return rewriter.visit(self) as! Markdown.Document
     }
 }
