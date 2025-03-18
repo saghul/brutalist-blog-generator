@@ -5,8 +5,12 @@
     <title>{{ title }}</title>
 </head>
 <body>
+{% if title %}
 <h1>{{ title }}</h1>
-{{ content }}
+{% if tagLine %}
+<h2>{{ tagLine }}</h2>
+{% endif %}
+{% endif %}
 <div id="index">
     <ul>
         {% for post in posts %}

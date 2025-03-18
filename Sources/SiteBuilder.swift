@@ -6,8 +6,10 @@ struct SiteBuilder {
         "post": String(decoding: Data(PackageResources.post_html), as: UTF8.self),
     ]
     private let templateEngine: TemplateEngine
+    private let config: Config
 
     init() {
+        self.config = Config.load(from: "config.yml")
         templateEngine = TemplateEngine(templates: SiteBuilder.templates)
     }
 
@@ -41,11 +43,10 @@ struct SiteBuilder {
         }
 
         // Generate index
-        let index = try Document.parse(path: "www/index.md")
-        try processIndex(index: index, documents: documents)
+        try processIndex(documents: documents)
     }
 
-    private func processIndex(index: Document, documents: [Document]) throws {
+    private func processIndex(documents: [Document]) throws {
         let outputDir = URL(fileURLWithPath: "build")
 
         let fileManager = FileManager.default
@@ -53,10 +54,9 @@ struct SiteBuilder {
         let outputUrl = outputDir
             .appendingPathComponent("index.html")
 
-        let html = index.toHtml()
         let context: [String : Any] = [
-            "title": index.title,
-            "content": html,
+            "title": config.title,
+            "tagLine": config.tagLine,
             "posts": documents.map { document in
                 return [
                     "title": document.title,
