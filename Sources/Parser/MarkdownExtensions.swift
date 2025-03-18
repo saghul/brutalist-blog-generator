@@ -2,7 +2,7 @@ import Markdown
 
 struct TitleDeleter: MarkupRewriter {
     mutating func visitHeading(_ heading: Heading) -> Markup? {
-        if heading.level == 1 {
+        guard heading.level > 1 else {
             return nil
         }
 
