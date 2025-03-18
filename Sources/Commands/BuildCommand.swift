@@ -70,10 +70,6 @@ struct BuildCommand: ParsableCommand {
     }
 
     private func processPost(document: Document) throws {
-        print("Title: \(document.title)")
-        print("Date: \(document.date)")
-        print("Slug: \(document.slug)")
-
         let outputDir = URL(fileURLWithPath: "build/posts")
 
         let fileManager = FileManager.default
