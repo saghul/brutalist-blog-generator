@@ -1,10 +1,10 @@
 import ArgumentParser
 
 @main
-struct MWC: ParsableCommand {
+struct BBG: ParsableCommand {
     static let configuration = CommandConfiguration(
-        commandName: "mwc",
-        abstract: "A static website generator",
+        commandName: "bbg",
+        abstract: "Brutalist Blog Generator",
         subcommands: [
             InitCommand.self,
             BuildCommand.self
