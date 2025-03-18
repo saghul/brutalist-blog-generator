@@ -7,21 +7,28 @@ struct SiteBuilder {
     ]
     private let templateEngine: TemplateEngine
     private let config: Config
+    private let srcDir: URL
+    private let postsDir: URL
+    private let outputDir: URL
+    private let outputPostsDir: URL
 
     init() {
-        self.config = Config.load(from: "config.yml")
+        config = Config.load(from: "config.yml")
         templateEngine = TemplateEngine(templates: SiteBuilder.templates)
+        srcDir = URL(fileURLWithPath: config.srcDir)
+        postsDir = srcDir.appendingPathComponent("posts")
+        outputDir = URL(fileURLWithPath: config.outputDir)
+        outputPostsDir = outputDir.appendingPathComponent("posts")
     }
 
     func build() throws {
         let fileManager = FileManager.default
-        let directoryURL = URL(fileURLWithPath: "www/posts")
         var documents: [Document] = []
 
-        if let enumerator = fileManager.enumerator(atPath: directoryURL.path) {
+        if let enumerator = fileManager.enumerator(atPath: postsDir.path) {
             while let filePath = enumerator.nextObject() as? String {
                 if filePath.hasSuffix(".md") {
-                    let fullPathUrl = directoryURL.appendingPathComponent(filePath)
+                    let fullPathUrl = postsDir.appendingPathComponent(filePath)
                     print("Found file: \(fullPathUrl.path)")
                     do {
                         let document = try Document.parse(path: fullPathUrl.path)
@@ -37,6 +44,9 @@ struct SiteBuilder {
         // Sort documents by date
         documents.sort { $0.date > $1.date }
 
+        // Prepare output directory
+        try fileManager.createDirectory(at: outputPostsDir, withIntermediateDirectories: true, attributes: nil)
+
         // Process each document
         for document in documents {
             try processPost(document: document)
@@ -47,10 +57,6 @@ struct SiteBuilder {
     }
 
     private func processIndex(documents: [Document]) throws {
-        let outputDir = URL(fileURLWithPath: "build")
-
-        let fileManager = FileManager.default
-        try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: true, attributes: nil)
         let outputUrl = outputDir
             .appendingPathComponent("index.html")
 
@@ -72,11 +78,7 @@ struct SiteBuilder {
     }
 
     private func processPost(document: Document) throws {
-        let outputDir = URL(fileURLWithPath: "build/posts")
-
-        let fileManager = FileManager.default
-        try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: true, attributes: nil)
-        let outputUrl = outputDir
+        let outputUrl = outputPostsDir
             .appendingPathComponent(document.fileName)
 
         let html = document.toHtml()

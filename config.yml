@@ -1,2 +1,13 @@
+# This file contains the configuration for the Brutalist Blog Generator
+
+# The title of the blog, will be visible in the index page
 title: "Brutalist Blog Generator"
+
+# The tagline of the blog, will be visible in the index page
 tagLine: "Because, often, less is more"
+
+# The directory with the source files, posts must go in a subdirectory called "posts"
+srcDir: "www"
+
+# The directory where the generated files will be placed
+outputDir: "build"
