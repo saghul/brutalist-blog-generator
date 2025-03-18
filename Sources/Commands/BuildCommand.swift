@@ -56,7 +56,15 @@ struct BuildCommand: ParsableCommand {
             .appendingPathComponent(fileName)
 
         let html = document.toHtml()
-        try html.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
+        let context = [
+            "post": [
+                "title": document.title,
+                "date": document.date,
+                "content": html
+            ]
+        ]
+        let finalHtml = try renderPost(context: context)
+        try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")
     }
