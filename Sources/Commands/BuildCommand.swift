@@ -37,6 +37,36 @@ struct BuildCommand: ParsableCommand {
         for document in documents {
             try processPost(document: document)
         }
+
+        // Generate index
+        let index = try Document.parse(path: "www/index.md")
+        try processIndex(index: index, documents: documents)
+    }
+
+    private func processIndex(index: Document, documents: [Document]) throws {
+        let outputDir = URL(fileURLWithPath: "build")
+
+        let fileManager = FileManager.default
+        try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: true, attributes: nil)
+        let outputUrl = outputDir
+            .appendingPathComponent("index.html")
+
+        let html = index.toHtml()
+        let context: [String : Any] = [
+            "title": index.title,
+            "content": html,
+            "posts": documents.map { document in
+                return [
+                    "title": document.title,
+                    "date": document.date,
+                    "url": "posts/" + document.fileName,
+                ]
+            }
+        ]
+        let finalHtml = try renderIndex(context: context)
+        try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
+
+        print("Successfully generated HTML at: \(outputUrl.path)")
     }
 
     private func processPost(document: Document) throws {
@@ -46,14 +76,10 @@ struct BuildCommand: ParsableCommand {
 
         let outputDir = URL(fileURLWithPath: "build/posts")
 
-        let calendar = Calendar.current
-        let year = calendar.component(.year, from: document.date)
-        let month = calendar.component(.month, from: document.date)
-        let fileName = String(format: "%04d-%02d-%@.html", year, month, document.slug)
         let fileManager = FileManager.default
         try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: true, attributes: nil)
         let outputUrl = outputDir
-            .appendingPathComponent(fileName)
+            .appendingPathComponent(document.fileName)
 
         let html = document.toHtml()
         let context = [

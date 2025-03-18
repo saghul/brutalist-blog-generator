@@ -63,6 +63,16 @@ public struct Document {
     }
 }
 
+// Filename
+extension Document {
+    var fileName: String {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        return String(format: "%04d-%02d-%@.html", year, month, slug)
+    }
+}
+
 // Utilities
 extension Document {
     static func splitFrontMatter(from content: String) -> (yaml: String, content: String) {
