@@ -1,12 +1,12 @@
 import Foundation
 import Markdown
 
-public enum DocumentError: Error {
+enum DocumentError: Error {
     case missingTitle
     case invalidSlug
 }
 
-public struct Document {
+struct Document {
     private let content: Markdown.Document
     private let metadata: DocumentMetadata
     private let _title: String
@@ -19,7 +19,7 @@ public struct Document {
         self._slug = slug
     }
 
-    public static func parse(path: String) throws -> Document {
+    static func parse(path: String) throws -> Document {
         let fileContent = try String(contentsOfFile: path, encoding: .utf8)
 
         // Split YAML front matter and content
@@ -46,7 +46,7 @@ public struct Document {
         return Document(content: document.deleteTitle(), metadata: metadata, title: title, slug: validSlug)
     }
 
-    public func toHtml() -> String {
+    func toHtml() -> String {
         return HTMLFormatter.format(content)
     }
 
@@ -113,5 +113,4 @@ extension Document {
 
         return result
     }
-
 }

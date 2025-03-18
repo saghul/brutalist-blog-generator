@@ -6,7 +6,7 @@ enum MetadataError: Error {
     case missingDate
 }
 
-public struct DocumentMetadata {
+struct DocumentMetadata {
     let date: Date
     let title: String?
     let slug: String?
@@ -17,7 +17,7 @@ public struct DocumentMetadata {
         self.slug = slug
     }
 
-    public static func parse(data: String?) throws -> DocumentMetadata {
+    static func parse(data: String?) throws -> DocumentMetadata {
         let yaml = try Yams.load(yaml: data ?? "") as? [String: String]
 
         // Extract date and make sure it's correctly formatted'
