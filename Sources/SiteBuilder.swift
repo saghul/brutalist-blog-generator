@@ -5,6 +5,7 @@ struct SiteBuilder {
         "base.html": String(decoding: Data(PackageResources.base_html), as: UTF8.self),
         "index.html": String(decoding: Data(PackageResources.index_html), as: UTF8.self),
         "post.html": String(decoding: Data(PackageResources.post_html), as: UTF8.self),
+        "main.css": String(decoding: Data(PackageResources.main_css), as: UTF8.self),
     ]
     private let templateEngine: TemplateEngine
     private let config: Config
@@ -55,8 +56,20 @@ struct SiteBuilder {
 
         // Generate index
         try processIndex(documents: documents)
+
+        // Generate CSS
+        try processCss()
     }
 
+    private func processCss() throws {
+        let outputUrl = outputDir
+            .appendingPathComponent("main.css")
+
+        let finalCss = try templateEngine.renderTemplate(name: "main.css", context: [:])
+        try finalCss.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
+
+        print("Successfully generated CSS at: \(outputUrl.path)")
+    }
     private func processIndex(documents: [Document]) throws {
         let outputUrl = outputDir
             .appendingPathComponent("index.html")
