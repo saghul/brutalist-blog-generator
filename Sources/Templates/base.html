@@ -8,20 +8,44 @@
             background-color: #FAFAFA;
             margin: 40px auto;
             max-width: 650px;
-            line-height: 1.6;
-            font-size: 18px;
+            line-height: 1.4;
+            font-family: Open Sans,Arial;
+            font-size: 16px;
             color: #444;
             padding: 0 10px;
         }
         h1,h2,h3 {
             line-height: 1.2;
         }
+        li p {
+            margin: 0;
+        }
+        blockquote {
+            border-left: 5px solid #DDD;
+            padding-left: 10px;
+        }
+        code {
+            background: #F4F4F4;
+            border: 1px solid #DDD;
+        }
+        pre code {
+            border-left: 3px solid #2B2B2B;
+            display: block;
+            max-width: 100%;
+            overflow: auto;
+            padding-left: 10px;
+        }
+        p.sticky {
+            margin-top: -1em;
+        }
     </style>
 </head>
 <body>
 <p>
     <h1>{{ title }}</h1>
-    <h3><i>{{ tagLine }}</i></h3>
+    <p class="sticky">
+        <i>{{ tagLine }}</i>
+    </p>
 </p>
 <hr />
 {% block content %}{% endblock %}
