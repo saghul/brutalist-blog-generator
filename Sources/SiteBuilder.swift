@@ -2,8 +2,9 @@ import Foundation
 
 struct SiteBuilder {
     private static let templates = [
-        "index": String(decoding: Data(PackageResources.index_html), as: UTF8.self),
-        "post": String(decoding: Data(PackageResources.post_html), as: UTF8.self),
+        "base.html": String(decoding: Data(PackageResources.base_html), as: UTF8.self),
+        "index.html": String(decoding: Data(PackageResources.index_html), as: UTF8.self),
+        "post.html": String(decoding: Data(PackageResources.post_html), as: UTF8.self),
     ]
     private let templateEngine: TemplateEngine
     private let config: Config
@@ -60,18 +61,20 @@ struct SiteBuilder {
         let outputUrl = outputDir
             .appendingPathComponent("index.html")
 
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         let context: [String : Any] = [
             "title": config.title,
             "tagLine": config.tagLine,
             "posts": documents.map { document in
                 return [
                     "title": document.title,
-                    "date": document.date,
+                    "date": dateFormatter.string(from: document.date),
                     "url": "posts/" + document.fileName,
                 ]
             }
         ]
-        let finalHtml = try templateEngine.renderTemplate(name: "index", context: context)
+        let finalHtml = try templateEngine.renderTemplate(name: "index.html", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")
@@ -82,14 +85,18 @@ struct SiteBuilder {
             .appendingPathComponent(document.fileName)
 
         let html = document.toHtml()
-        let context = [
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let context: [String : Any] = [
+            "title": config.title,
+            "tagLine": config.tagLine,
             "post": [
                 "title": document.title,
-                "date": document.date,
+                "date": dateFormatter.string(from: document.date),
                 "content": html
             ]
         ]
-        let finalHtml = try templateEngine.renderTemplate(name: "post", context: context)
+        let finalHtml = try templateEngine.renderTemplate(name: "post.html", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")

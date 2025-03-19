@@ -24,6 +24,7 @@ let package = Package(
                 .product(name: "Stencil", package: "Stencil"),
             ],
             resources: [
+                .embedInCode("Templates/base.html"),
                 .embedInCode("Templates/index.html"),
                 .embedInCode("Templates/post.html"),
             ]
