@@ -12,5 +12,5 @@ srcDir: "www"
 # The directory where the generated files will be placed
 outputDir: "build"
 
-# The public URL for the blog, used to generate the RSS feed
+# The public URL for the blog
 siteUrl: "http://localhost:8000"

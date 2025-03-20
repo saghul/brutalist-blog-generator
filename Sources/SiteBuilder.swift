@@ -84,6 +84,7 @@ struct SiteBuilder {
         let context: [String : Any] = [
             "title": config.title,
             "tagLine": config.tagLine,
+            "siteUrl": config.siteUrl,
             "posts": documents.map { document in
                 return [
                     "title": document.title,
@@ -107,6 +108,7 @@ struct SiteBuilder {
         let context: [String : Any] = [
             "title": config.title,
             "tagLine": config.tagLine,
+            "siteUrl": config.siteUrl,
             "post": [
                 "title": document.title,
                 "date": dateFormatter.string(from: document.date),
