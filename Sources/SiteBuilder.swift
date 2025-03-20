@@ -12,6 +12,7 @@ struct SiteBuilder {
     private let config: Config
     private let srcDir: URL
     private let postsDir: URL
+    private let staticDir: URL
     private let outputDir: URL
     private let outputPostsDir: URL
 
@@ -20,6 +21,7 @@ struct SiteBuilder {
         templateEngine = TemplateEngine(templates: SiteBuilder.templates)
         srcDir = URL(fileURLWithPath: config.srcDir)
         postsDir = srcDir.appendingPathComponent("posts")
+        staticDir = srcDir.appendingPathComponent("static")
         outputDir = URL(fileURLWithPath: config.outputDir)
         outputPostsDir = outputDir.appendingPathComponent("posts")
     }
@@ -48,6 +50,12 @@ struct SiteBuilder {
         documents.sort { $0.date > $1.date }
 
         // Prepare output directory
+        do {
+            try fileManager.removeItem(at: outputDir)
+        } catch {
+            // Ignore error, directory might not exist.
+        }
+
         try fileManager.createDirectory(at: outputPostsDir, withIntermediateDirectories: true, attributes: nil)
 
         // Process each document
@@ -63,6 +71,11 @@ struct SiteBuilder {
 
         // Generate CSS
         try processCss()
+
+        // Copy static directory
+        if fileManager.fileExists(atPath: staticDir.path) {
+            try fileManager.copyItem(at: staticDir, to: outputDir.appendingPathComponent("static"))
+        }
     }
 
     private func processCss() throws {
