@@ -29,10 +29,16 @@ pre code {
     overflow: auto;
     padding-left: 10px;
 }
-p.sticky {
-    margin-top: -1em;
-}
 a {
     color: #07A;
     text-decoration: none;
+}
+p.sticky {
+    margin-top: -1em;
+}
+div.post img {
+    display: block;
+    max-width: 600px;
+    max-height: 500px;
+    margin: 0 auto;
 }
