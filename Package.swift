@@ -28,6 +28,7 @@ let package = Package(
                 .embedInCode("Templates/index.html"),
                 .embedInCode("Templates/post.html"),
                 .embedInCode("Templates/main.css"),
+                .embedInCode("Templates/rss.xml"),
             ]
         ),
     ]

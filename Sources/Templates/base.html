@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{{ title }}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% block stylesDir %}{% endblock %}main.css">
+    {% block head %}
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    {% endblock %}
 </head>
 <body>
 <p>
