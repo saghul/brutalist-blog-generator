@@ -98,6 +98,7 @@ struct SiteBuilder {
             "title": config.title,
             "tagLine": config.tagLine,
             "siteUrl": config.siteUrl,
+            "links": config.links,
             "posts": documents.map { document in
                 return [
                     "title": document.title,

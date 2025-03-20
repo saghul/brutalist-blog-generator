@@ -2,6 +2,12 @@
 
 {% block content %}
 
+<p>
+    {% for link in links %}
+        <a href="{{ link.url }}">{{ link.name }}</a>{% if not forloop.last %} &mdash;{% endif %}
+    {% endfor %}
+</p>
+
 <h2>Posts</h2>
 <p>
     <ul>
