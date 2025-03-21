@@ -1,3 +1,5 @@
+#if os(macOS)
+
 import Foundation
 
 protocol DirectoryMonitorDelegate {
@@ -77,3 +79,5 @@ class DirectoryMonitor {
         stopMonitoring()
     }
 }
+
+#endif
