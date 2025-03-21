@@ -9,12 +9,13 @@ struct SiteBuilder {
         "rss.xml": String(decoding: Data(PackageResources.rss_xml), as: UTF8.self),
     ]
     private let templateEngine: TemplateEngine
-    private let config: Config
     private let srcDir: URL
     private let postsDir: URL
     private let staticDir: URL
     private let outputDir: URL
     private let outputPostsDir: URL
+
+    let config: Config
 
     init() {
         config = Config.load(from: "config.yml")
