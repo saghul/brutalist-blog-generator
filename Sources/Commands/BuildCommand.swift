@@ -14,7 +14,7 @@ struct BuildCommand: ParsableCommand {
         let builder = SiteBuilder()
         try builder.build()
 
-        #if os(macOS)
+        #if os(macOS) || os(Linux)
         if watch {
             let watcher = DirectoryMonitor(url: URL(fileURLWithPath: builder.config.srcDir))
             watcher.delegate = self
@@ -32,9 +32,8 @@ struct BuildCommand: ParsableCommand {
     }
 }
 
-#if os(macOS)
 extension BuildCommand: DirectoryMonitorDelegate {
-    func directoryMonitorDidObserveChange(directoryMonitor: DirectoryMonitor) {
+    func directoryMonitorDidObserveChange(path: String) {
         do {
             print("Changes detected, rebuilding...")
             let builder = SiteBuilder()
@@ -44,4 +43,3 @@ extension BuildCommand: DirectoryMonitorDelegate {
         }
     }
 }
-#endif
