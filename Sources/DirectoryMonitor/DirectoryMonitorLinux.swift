@@ -92,7 +92,7 @@ class DirectoryMonitor {
             if event.mask != 0 {
                 print("Change detected in watch descriptor: \(event.wd)")
                 updateWatches()
-                delegate?.directoryMonitorDidObserveChange(directoryMonitor: self)
+                delegate?.directoryMonitorDidObserveChange(path: watchDescriptors[event.wd]!)
             }
 
             offset += MemoryLayout<inotify_event>.size + Int(event.len)
