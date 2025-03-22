@@ -2,10 +2,6 @@
 
 import Foundation
 
-protocol DirectoryMonitorDelegate {
-    func directoryMonitorDidObserveChange(directoryMonitor: DirectoryMonitor)
-}
-
 class DirectoryMonitor {
     var delegate: DirectoryMonitorDelegate?
 
@@ -54,7 +50,7 @@ class DirectoryMonitor {
                 guard let self = self else { return }
                 print("File changed: \(path)")
                 self.updateFileMonitors()
-                self.delegate?.directoryMonitorDidObserveChange(directoryMonitor: self)
+                self.delegate?.directoryMonitorDidObserveChange(path: path)
             }
             source.setCancelHandler { [weak self] in
                 guard let self = self else { return }
