@@ -90,7 +90,7 @@ class DirectoryMonitor {
             }
 
             if event.mask != 0 {
-                print("Change detected in watch descriptor: \(event.wd)")
+                //print("Change detected in watch descriptor: \(event.wd)")
                 updateWatches()
                 delegate?.directoryMonitorDidObserveChange(path: watchDescriptors[event.wd] ?? "")
             }
