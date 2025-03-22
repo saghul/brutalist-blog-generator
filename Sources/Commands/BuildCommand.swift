@@ -10,25 +10,24 @@ struct BuildCommand: ParsableCommand {
     @Flag(name: .long, help: "Watch for changes and rebuild automatically")
     var watch: Bool = false
 
-    func run() throws {
-        let builder = SiteBuilder()
+    private var builder: SiteBuilder!
+
+    mutating func run() throws {
+        builder = SiteBuilder()
         try builder.build()
 
-        #if os(macOS) || os(Linux)
         if watch {
+            #if os(macOS) || os(Linux)
             let watcher = DirectoryMonitor(url: URL(fileURLWithPath: builder.config.srcDir))
             watcher.delegate = self
             watcher.startMonitoring()
-
             print("Watching for changes in \(builder.config.srcDir)...")
             dispatchMain()
-        }
-        #else
-        if watch {
+            #else
             print("Watching is not supported on this platform")
             Foundation.exit(1)
+            #endif
         }
-        #endif
     }
 }
 
@@ -36,7 +35,6 @@ extension BuildCommand: DirectoryMonitorDelegate {
     func directoryMonitorDidObserveChange(path: String) {
         do {
             print("Changes detected, rebuilding...")
-            let builder = SiteBuilder()
             try builder.build()
         } catch {
             print("Error rebuilding: \(error)")
