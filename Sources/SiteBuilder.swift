@@ -102,6 +102,7 @@ struct SiteBuilder: Decodable {
         let context: [String : Any] = [
             "title": config.title,
             "tagLine": config.tagLine,
+            "siteRoot": "",
             "siteUrl": config.siteUrl,
             "links": config.links,
             "posts": documents.map { document in
@@ -127,6 +128,7 @@ struct SiteBuilder: Decodable {
         let context: [String : Any] = [
             "title": config.title,
             "tagLine": config.tagLine,
+            "siteRoot": "../",
             "siteUrl": config.siteUrl,
             "post": [
                 "title": document.title,
