@@ -33,6 +33,9 @@ a {
     color: #07A;
     text-decoration: none;
 }
+div.title h1 {
+    font-size: 2.5em;
+}
 p.sticky {
     margin-top: -1em;
 }
