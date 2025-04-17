@@ -90,9 +90,10 @@ class DirectoryMonitor {
             }
 
             if event.mask != 0 {
-                //print("Change detected in watch descriptor: \(event.wd)")
+                let path = watchDescriptors[event.wd] ?? ""
+                print("File changed: \(path)")
                 updateWatches()
-                delegate?.directoryMonitorDidObserveChange(path: watchDescriptors[event.wd] ?? "")
+                delegate?.directoryMonitorDidObserveChange(path: path)
             }
 
             offset += MemoryLayout<inotify_event>.size + Int(event.len)
