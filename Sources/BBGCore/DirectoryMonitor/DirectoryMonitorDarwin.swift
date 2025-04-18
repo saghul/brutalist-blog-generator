@@ -2,18 +2,18 @@
 
 import Foundation
 
-class DirectoryMonitor {
-    var delegate: DirectoryMonitorDelegate?
+public class DirectoryMonitor {
+    public var delegate: DirectoryMonitorDelegate?
 
     private let queue =  DispatchQueue.main
     private let url: URL
     private var fileMonitors: [String: DispatchSource] = [:]
 
-    init(url: URL) {
+    public init(url: URL) {
         self.url = url
     }
 
-    func startMonitoring() {
+    public func startMonitoring() {
         // Set up initial file monitors.
         updateFileMonitors()
     }
@@ -63,7 +63,7 @@ class DirectoryMonitor {
         }
     }
 
-    func stopMonitoring() {
+    public func stopMonitoring() {
         // Cancel all individual file monitors
         for monitor in fileMonitors.values {
             monitor.cancel()

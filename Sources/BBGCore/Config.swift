@@ -1,13 +1,13 @@
 import Yams
 
-struct Config {
-    let title: String
-    let tagLine: String
-    let srcDir: String
-    let outputDir: String
-    let siteUrl: String
-    let links: [Link]
-    let footer: String
+public struct Config {
+    public let title: String
+    public let tagLine: String
+    public let srcDir: String
+    public let outputDir: String
+    public let siteUrl: String
+    public let links: [Link]
+    public let footer: String
 
     private init(title: String? = nil,
                  tagLine: String? = nil,
@@ -25,7 +25,7 @@ struct Config {
         self.footer = footer ?? ""
     }
 
-    static func load(from path: String) -> Config {
+    public static func load(from path: String) -> Config {
         guard let data = try? String(contentsOfFile: path) else {
             print("Failed to load config file")
             return Config()
@@ -54,7 +54,7 @@ struct Config {
     }
 }
 
-struct Link {
+public struct Link {
     let name: String
     let url: String
 }

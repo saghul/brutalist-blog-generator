@@ -1,5 +1,7 @@
 import ArgumentParser
 
+import BBGCore
+
 struct InitCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "init",
