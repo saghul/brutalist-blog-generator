@@ -7,19 +7,22 @@ struct Config {
     let outputDir: String
     let siteUrl: String
     let links: [Link]
+    let footer: String
 
     private init(title: String? = nil,
                  tagLine: String? = nil,
                  srcDir: String? = nil,
                  outputDir: String? = nil,
                  siteUrl: String? = nil,
-                 links: [Link]? = nil) {
+                 links: [Link]? = nil,
+                 footer: String? = nil) {
         self.title = title ?? ""
         self.tagLine = tagLine ?? ""
         self.srcDir = srcDir ?? "www"
         self.outputDir = outputDir ?? "build"
         self.siteUrl = siteUrl ?? ""
         self.links = links ?? []
+        self.footer = footer ?? ""
     }
 
     static func load(from path: String) -> Config {
@@ -46,7 +49,8 @@ struct Config {
                       srcDir: yaml["srcDir"] as? String,
                       outputDir: yaml["outputDir"] as? String,
                       siteUrl: yaml["siteUrl"] as? String,
-                      links: links)
+                      links: links,
+                      footer: yaml["footer"] as? String)
     }
 }
 

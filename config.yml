@@ -22,3 +22,6 @@ links:
 
   - name: "RSS"
     url: "rss.xml"
+
+# Footer for all pages
+footer: "© 2025 Saúl Ibarra Corretgé"

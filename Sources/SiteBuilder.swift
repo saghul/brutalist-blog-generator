@@ -105,6 +105,7 @@ struct SiteBuilder: Decodable {
             "siteRoot": "",
             "siteUrl": config.siteUrl,
             "links": config.links,
+            "footer": config.footer,
             "posts": documents.map { document in
                 return [
                     "title": document.title,
@@ -131,6 +132,7 @@ struct SiteBuilder: Decodable {
             "tagLine": config.tagLine,
             "siteRoot": "../",
             "siteUrl": config.siteUrl,
+            "footer": config.footer,
             "post": [
                 "title": document.title,
                 "date": document.date,
