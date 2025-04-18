@@ -4,18 +4,15 @@
 
 {% block content %}
 
-<div class="post">
-<p>
+<main class="post">
     <h1>{{ post.title }}</h1>
     <p class="sticky">
-        <pre>{{ post.date }}</pre>
+        <time datetime="{{ post.date }}"><pre>{{ post.formattedDate }}</pre></time>
     </p>
-</p>
-<p>
-    {{ post.content }}
-</p>
 
-<a href="../">↩ Back</a>
-</div>
+    {{ post.content }}
+
+    <a href="../">↩ Back</a>
+</main>
 
 {% endblock %}

@@ -9,13 +9,13 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ siteUrl }}/rss.xml">
 </head>
 <body>
-<div class="title">
-    <h1>{{ title }}</h1>
-    <p class="sticky">
-        <i>{{ tagLine }}</i>
-    </p>
-</div>
-<hr />
-{% block content %}{% endblock %}
+    <header>
+        <h1>{{ title }}</h1>
+        <p class="sticky">
+            <i>{{ tagLine }}</i>
+        </p>
+        <hr />
+    </header>
+    {% block content %}{% endblock %}
 </body>
 </html>

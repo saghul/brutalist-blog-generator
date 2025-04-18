@@ -33,13 +33,13 @@ a {
     color: #07A;
     text-decoration: none;
 }
-div.title h1 {
+header h1 {
     font-size: 2.5em;
 }
 p.sticky {
     margin-top: -1em;
 }
-div.post img {
+main.post img {
     display: block;
     max-width: 600px;
     max-height: 500px;

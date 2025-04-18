@@ -108,7 +108,8 @@ struct SiteBuilder: Decodable {
             "posts": documents.map { document in
                 return [
                     "title": document.title,
-                    "date": dateFormatter.string(from: document.date),
+                    "date": document.date,
+                    "formattedDate": dateFormatter.string(from: document.date),
                     "url": "posts/" + document.fileName,
                 ]
             }
@@ -132,7 +133,8 @@ struct SiteBuilder: Decodable {
             "siteUrl": config.siteUrl,
             "post": [
                 "title": document.title,
-                "date": dateFormatter.string(from: document.date),
+                "date": document.date,
+                "formattedDate": dateFormatter.string(from: document.date),
                 "content": document.toHtml()
             ]
         ]

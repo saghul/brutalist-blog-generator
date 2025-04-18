@@ -2,19 +2,21 @@
 
 {% block content %}
 
-<p>
+<nav>
     {% for link in links %}
         <a href="{{ link.url }}">{{ link.name }}</a>{% if not forloop.last %} &mdash;{% endif %}
     {% endfor %}
-</p>
+</nav>
 
-<h2>Posts</h2>
-<p>
-    <ul>
-        {% for post in posts %}
-          <li><a href="{{ post.url }}">{{ post.title }}</a> &mdash; <i>{{ post.date }}</i></li>
-        {% endfor %}
-    </ul>
-</p>
+<main>
+    <h1>Posts</h1>
+    <p>
+        <ul>
+            {% for post in posts %}
+              <li><a href="{{ post.url }}">{{ post.title }}</a> &mdash; <time datetime="{{ post.date }}"><i>{{ post.formattedDate }}</i></time></li>
+            {% endfor %}
+        </ul>
+    </p>
+</main>
 
 {% endblock %}
