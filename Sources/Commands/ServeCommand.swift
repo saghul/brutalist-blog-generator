@@ -1,5 +1,4 @@
 import ArgumentParser
-import Hummingbird
 import Foundation
 
 struct ServeCommand: AsyncParsableCommand {
@@ -29,15 +28,13 @@ struct ServeCommand: AsyncParsableCommand {
         print("Watching is not supported on this platform")
         #endif
 
-        let router = Router()
-        router.add(middleware: FileMiddleware(builder.config.outputDir, searchForIndexHtml: true))
-
-        let app = Application(
-            router: router,
-            configuration: .init(address: .hostname(hostname, port: port))
+        let server = SimpleWebServer(
+            hostname: hostname,
+            port: port,
+            path: builder.config.outputDir
         )
 
-        try await app.runService()
+        try await server.run()
     }
 }
 
