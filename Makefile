@@ -27,6 +27,10 @@ release:
 	$(SWIFT) build $(RELEASE_FLAGS)
 	@echo "Release build complete. Binary available at: $(RELEASE_DIR)/$(BINARY_NAME)"
 
+# Run tests
+test:
+	$(SWIFT) test
+
 # Clean build artifacts
 clean:
 	$(SWIFT) package clean

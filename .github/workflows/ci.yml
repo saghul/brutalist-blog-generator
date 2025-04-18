@@ -18,5 +18,6 @@ jobs:
           swift-version: "6.0.2"
       - run: swift --version
       - run: make
+      - run: make test
       - run: make release
       - run: .build/release/bbg build
