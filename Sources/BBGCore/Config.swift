@@ -26,7 +26,7 @@ public struct Config {
     }
 
     public static func load(from path: String) -> Config {
-        guard let data = try? String(contentsOfFile: path) else {
+        guard let data = try? String(contentsOfFile: path, encoding: .utf8) else {
             print("Failed to load config file")
             return Config()
         }
