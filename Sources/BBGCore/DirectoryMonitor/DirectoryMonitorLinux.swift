@@ -9,8 +9,8 @@ import Musl
 #error("Unsupported platform")
 #endif
 
-class DirectoryMonitor {
-    var delegate: DirectoryMonitorDelegate?
+public class DirectoryMonitor {
+    public var delegate: DirectoryMonitorDelegate?
 
     private let queue = DispatchQueue.main
     private let url: URL
@@ -19,7 +19,7 @@ class DirectoryMonitor {
     private var isMonitoring = false
     private var monitoringSource: DispatchSourceRead?
 
-    init(url: URL) {
+    public init(url: URL) {
         self.url = url
         self.inotifyFd = inotify_init()
         if inotifyFd == -1 {
@@ -27,7 +27,7 @@ class DirectoryMonitor {
         }
     }
 
-    func startMonitoring() {
+    public func startMonitoring() {
         guard !isMonitoring else { return }
         isMonitoring = true
 
@@ -100,7 +100,7 @@ class DirectoryMonitor {
         }
     }
 
-    func stopMonitoring() {
+    public func stopMonitoring() {
         guard isMonitoring else { return }
         isMonitoring = false
 

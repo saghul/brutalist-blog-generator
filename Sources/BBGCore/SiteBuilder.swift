@@ -1,6 +1,6 @@
 import Foundation
 
-struct SiteBuilder: Decodable {
+public struct SiteBuilder: Decodable {
     private static let templates = [
         "base.html": String(decoding: Data(PackageResources.base_html), as: UTF8.self),
         "index.html": String(decoding: Data(PackageResources.index_html), as: UTF8.self),
@@ -15,9 +15,9 @@ struct SiteBuilder: Decodable {
     private let outputDir: URL
     private let outputPostsDir: URL
 
-    let config: Config
+    public let config: Config
 
-    init() {
+    public init() {
         config = Config.load(from: "config.yml")
         templateEngine = TemplateEngine(templates: SiteBuilder.templates)
         srcDir = URL(fileURLWithPath: config.srcDir)
@@ -27,11 +27,11 @@ struct SiteBuilder: Decodable {
         outputPostsDir = outputDir.appendingPathComponent("posts")
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         self.init()
     }
 
-    func build() throws {
+    public func build() throws {
         let fileManager = FileManager.default
         var documents: [Document] = []
 

@@ -1,6 +1,8 @@
 import ArgumentParser
 import Foundation
 
+import BBGCore
+
 struct ServeCommand: AsyncParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "serve",

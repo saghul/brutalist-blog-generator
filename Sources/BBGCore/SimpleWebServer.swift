@@ -1,17 +1,17 @@
 import Hummingbird
 
-struct SimpleWebServer {
+public struct SimpleWebServer {
     let hostname: String
     let port: Int
     let path: String
 
-    init(hostname: String, port: Int, path: String) {
+    public init(hostname: String, port: Int, path: String) {
         self.hostname = hostname
         self.port = port
         self.path = path
     }
 
-    func run() async throws {
+    public func run() async throws {
         let router = Router()
         router.add(middleware: FileMiddleware(path, searchForIndexHtml: true))
 

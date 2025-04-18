@@ -1,6 +1,8 @@
 import ArgumentParser
 import Foundation
 
+import BBGCore
+
 struct BuildCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "build",

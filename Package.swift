@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "bbg",
+    name: "brutalist-blog-generator",
     platforms: [
         .macOS(.v14)
     ],
@@ -20,6 +20,12 @@ let package = Package(
             name: "bbg",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "BBGCore",
+            ]
+        ),
+        .target(
+            name: "BBGCore",
+            dependencies: [
                 .product(name: "Markdown", package: "swift-markdown"),
                 .product(name: "Yams", package: "Yams"),
                 .product(name: "Stencil", package: "Stencil"),
