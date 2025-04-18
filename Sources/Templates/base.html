@@ -17,5 +17,12 @@
         <hr />
     </header>
     {% block content %}{% endblock %}
+    {% if footer %}
+    <footer>
+        <small>
+            {{ footer }}
+        </small>
+    </footer>
+    {% endif %}
 </body>
 </html>
