@@ -39,5 +39,9 @@ let package = Package(
                 .embedInCode("Templates/rss.xml"),
             ]
         ),
+        .testTarget(
+            name: "BBGCoreTests",
+            dependencies: ["BBGCore"]
+        )
     ]
 )
