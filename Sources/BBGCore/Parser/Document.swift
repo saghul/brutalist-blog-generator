@@ -104,7 +104,7 @@ extension Document {
         var result: String? = nil
         if let latin = string.applyingTransform(StringTransform("Any-Latin; Latin-ASCII; Lower;"), reverse: false) {
             let urlComponents = latin.components(separatedBy: slugSafeCharacters.inverted)
-            result = urlComponents.filter { $0 != "" }.joined(separator: "-")
+            result = urlComponents.filter { $0 != "" && $0 != "-" }.joined(separator: "-")
         }
 
         guard let result = result, !result.isEmpty else {
