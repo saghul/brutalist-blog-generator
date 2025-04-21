@@ -5,15 +5,18 @@ public struct SiteBuilder: Decodable {
         "base.html": String(decoding: Data(PackageResources.base_html), as: UTF8.self),
         "index.html": String(decoding: Data(PackageResources.index_html), as: UTF8.self),
         "post.html": String(decoding: Data(PackageResources.post_html), as: UTF8.self),
+        "page.html": String(decoding: Data(PackageResources.page_html), as: UTF8.self),
         "main.css": String(decoding: Data(PackageResources.main_css), as: UTF8.self),
         "rss.xml": String(decoding: Data(PackageResources.rss_xml), as: UTF8.self),
     ]
     private let templateEngine: TemplateEngine
     private let srcDir: URL
     private let postsDir: URL
+    private let pagesDir: URL
     private let staticDir: URL
     private let outputDir: URL
     private let outputPostsDir: URL
+    private let outputPagesDir: URL
 
     public let config: Config
 
@@ -22,9 +25,11 @@ public struct SiteBuilder: Decodable {
         templateEngine = TemplateEngine(templates: SiteBuilder.templates)
         srcDir = URL(fileURLWithPath: config.srcDir)
         postsDir = srcDir.appendingPathComponent("posts")
+        pagesDir = srcDir.appendingPathComponent("pages")
         staticDir = srcDir.appendingPathComponent("static")
         outputDir = URL(fileURLWithPath: config.outputDir)
         outputPostsDir = outputDir.appendingPathComponent("posts")
+        outputPagesDir = outputDir.appendingPathComponent("pages")
     }
 
     public init(from decoder: Decoder) throws {
@@ -33,26 +38,6 @@ public struct SiteBuilder: Decodable {
 
     public func build() throws {
         let fileManager = FileManager.default
-        var documents: [Document] = []
-
-        if let enumerator = fileManager.enumerator(atPath: postsDir.path) {
-            while let filePath = enumerator.nextObject() as? String {
-                if filePath.hasSuffix(".md") {
-                    let fullPathUrl = postsDir.appendingPathComponent(filePath)
-                    print("Found file: \(fullPathUrl.path)")
-                    do {
-                        let document = try Document.parse(path: fullPathUrl.path)
-                        documents.append(document)
-                    } catch {
-                        print("Failed to process file: \(fullPathUrl.path)")
-                        throw error
-                    }
-                }
-            }
-        }
-
-        // Sort documents by date
-        documents.sort { $0.date > $1.date }
 
         // Prepare output directory
         do {
@@ -61,18 +46,17 @@ public struct SiteBuilder: Decodable {
             // Ignore error, directory might not exist.
         }
 
-        try fileManager.createDirectory(at: outputPostsDir, withIntermediateDirectories: true, attributes: nil)
-
-        // Process each document
-        for document in documents {
-            try processPost(document: document)
-        }
+        // Process posts
+        let posts = try processPosts()
 
         // Generate RSS
-        try processRss(documents: documents)
+        try processRss(posts: posts)
+
+        // Generate pages
+        try processPages()
 
         // Generate index
-        try processIndex(documents: documents)
+        try processIndex(posts: posts)
 
         // Generate CSS
         try processCss()
@@ -81,6 +65,29 @@ public struct SiteBuilder: Decodable {
         if fileManager.fileExists(atPath: staticDir.path) {
             try fileManager.copyItem(at: staticDir, to: outputDir.appendingPathComponent("static"))
         }
+    }
+
+    private func loadDocuments(at: URL) throws -> [Document] {
+        let fileManager = FileManager.default
+        var docs: [Document] = []
+
+        if let enumerator = fileManager.enumerator(atPath: at.path) {
+            while let filePath = enumerator.nextObject() as? String {
+                if filePath.hasSuffix(".md") {
+                    let fullPathUrl = at.appendingPathComponent(filePath)
+                    //print("Found file: \(fullPathUrl.path)")
+                    do {
+                        let doc = try Document.parse(path: fullPathUrl.path)
+                        docs.append(doc)
+                    } catch {
+                        print("Failed to process file: \(fullPathUrl.path)")
+                        throw error
+                    }
+                }
+            }
+        }
+
+        return docs
     }
 
     private func processCss() throws {
@@ -93,7 +100,7 @@ public struct SiteBuilder: Decodable {
         print("Successfully generated CSS at: \(outputUrl.path)")
     }
 
-    private func processIndex(documents: [Document]) throws {
+    private func processIndex(posts: [Document]) throws {
         let outputUrl = outputDir
             .appendingPathComponent("index.html")
 
@@ -106,12 +113,12 @@ public struct SiteBuilder: Decodable {
             "siteUrl": config.siteUrl,
             "links": config.links,
             "footer": config.footer,
-            "posts": documents.map { document in
+            "posts": posts.map { post in
                 return [
-                    "title": document.title,
-                    "date": document.date,
-                    "formattedDate": dateFormatter.string(from: document.date),
-                    "url": "posts/" + document.fileName,
+                    "title": post.title,
+                    "date": post.date,
+                    "formattedDate": dateFormatter.string(from: post.date),
+                    "url": "posts/" + post.fileName,
                 ]
             }
         ]
@@ -121,9 +128,26 @@ public struct SiteBuilder: Decodable {
         print("Successfully generated HTML at: \(outputUrl.path)")
     }
 
-    private func processPost(document: Document) throws {
+    private func processPosts() throws -> [Document] {
+        let fileManager = FileManager.default
+        var posts = try loadDocuments(at: postsDir)
+
+        // Sort posts by date
+        posts.sort { $0.date > $1.date }
+
+        try fileManager.createDirectory(at: outputPostsDir, withIntermediateDirectories: true, attributes: nil)
+
+        // Process each document
+        for post in posts {
+            try processPost(post)
+        }
+
+        return posts
+    }
+
+    private func processPost(_ post: Document) throws {
         let outputUrl = outputPostsDir
-            .appendingPathComponent(document.fileName)
+            .appendingPathComponent(post.fileName)
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -134,10 +158,10 @@ public struct SiteBuilder: Decodable {
             "siteUrl": config.siteUrl,
             "footer": config.footer,
             "post": [
-                "title": document.title,
-                "date": document.date,
-                "formattedDate": dateFormatter.string(from: document.date),
-                "content": document.toHtml()
+                "title": post.title,
+                "date": post.date,
+                "formattedDate": dateFormatter.string(from: post.date),
+                "content": post.toHtml()
             ]
         ]
         let finalHtml = try templateEngine.renderTemplate(name: "post.html", context: context)
@@ -146,24 +170,57 @@ public struct SiteBuilder: Decodable {
         print("Successfully generated HTML at: \(outputUrl.path)")
     }
 
-    private func processRss(documents: [Document]) throws {
+    private func processPages() throws {
+        let fileManager = FileManager.default
+        let pages = try loadDocuments(at: pagesDir)
+
+        try fileManager.createDirectory(at: outputPagesDir, withIntermediateDirectories: true, attributes: nil)
+
+        // Process each page
+        for page in pages {
+            try processPage(page)
+        }
+    }
+
+    private func processPage(_ page: Document) throws {
+        let outputUrl = outputPagesDir
+            .appendingPathComponent(String(format: "%@.html", page.slug))
+
+        let context: [String : Any] = [
+            "title": config.title,
+            "tagLine": config.tagLine,
+            "siteRoot": "../",
+            "siteUrl": config.siteUrl,
+            "footer": config.footer,
+            "page": [
+                "title": page.title,
+                "content": page.toHtml()
+            ]
+        ]
+        let finalHtml = try templateEngine.renderTemplate(name: "page.html", context: context)
+        try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
+
+        print("Successfully generated HTML at: \(outputUrl.path)")
+    }
+
+    private func processRss(posts: [Document]) throws {
         let outputUrl = outputDir
             .appendingPathComponent("rss.xml")
 
         // Take only the 10 most recent posts
-        let recentPosts = Array(documents.prefix(10))
+        let recentPosts = Array(posts.prefix(10))
 
         let context: [String : Any] = [
             "title": config.title,
             "tagLine": config.tagLine,
             "date": Date().rfc822String(),
             "siteUrl": config.siteUrl,
-            "posts": recentPosts.map { document in
+            "posts": recentPosts.map { post in
                 return [
-                    "title": document.title,
-                    "date": document.date.rfc822String(),
-                    "url": "posts/" + document.fileName,
-                    "content": document.toHtml()
+                    "title": post.title,
+                    "date": post.date.rfc822String(),
+                    "url": "posts/" + post.fileName,
+                    "content": post.toHtml()
                 ]
             }
         ]

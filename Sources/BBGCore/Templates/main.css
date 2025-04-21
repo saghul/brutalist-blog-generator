@@ -45,15 +45,15 @@ footer {
     width: 100%;
     padding: 1em 0;
 }
-p.sticky {
-    margin-top: -1em;
-}
 main {
     flex-grow: 1;
 }
-main.post img {
+main img {
     display: block;
     max-width: 600px;
     max-height: 500px;
     margin: 0 auto;
+}
+p.sticky {
+    margin-top: -1em;
 }

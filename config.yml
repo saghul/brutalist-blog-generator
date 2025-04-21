@@ -23,5 +23,8 @@ links:
   - name: "RSS"
     url: "rss.xml"
 
+  - name: "About"
+    url: "pages/about.html"
+
 # Footer for all pages
 footer: "© 2025 Saúl Ibarra Corretgé"
