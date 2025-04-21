@@ -12,6 +12,8 @@ public struct SimpleWebServer {
     }
 
     public func run() async throws {
+        print("Starting server at http://\(hostname):\(port)")
+
         let router = Router()
         router.add(middleware: FileMiddleware(path, searchForIndexHtml: true))
 
@@ -20,7 +22,6 @@ public struct SimpleWebServer {
             configuration: .init(address: .hostname(hostname, port: port))
         )
 
-        print("Server started at http://\(hostname):\(port)")
         try await app.runService()
     }
 }
