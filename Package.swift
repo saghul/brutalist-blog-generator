@@ -35,6 +35,7 @@ let package = Package(
                 .embedInCode("Templates/base.html"),
                 .embedInCode("Templates/index.html"),
                 .embedInCode("Templates/post.html"),
+                .embedInCode("Templates/page.html"),
                 .embedInCode("Templates/main.css"),
                 .embedInCode("Templates/rss.xml"),
             ]
