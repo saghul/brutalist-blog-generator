@@ -4,11 +4,11 @@
 
 {% block content %}
 
-<main class="post">
-    <h1>{{ post.title }}</h1>
-    <p class="sticky">
-        <time datetime="{{ post.date }}"><pre>{{ post.formattedDate }}</pre></time>
-    </p>
+<main>
+    <hgroup>
+        <h1>{{ post.title }}</h1>
+        <p><time datetime="{{ post.date }}">{{ post.formattedDate }}</time></p>
+    </hgroup>
 
     {{ post.content }}
 

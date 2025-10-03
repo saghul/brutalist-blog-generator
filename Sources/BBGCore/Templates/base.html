@@ -10,10 +10,10 @@
 </head>
 <body>
     <header>
-        <h1>{{ title }}</h1>
-        <p class="sticky">
-            <i>{{ tagLine }}</i>
-        </p>
+        <hgroup>
+            <h1>{{ title }}</h1>
+            <p>{{ tagLine }}</p>
+        </hgroup>
         <hr />
     </header>
     {% block content %}{% endblock %}

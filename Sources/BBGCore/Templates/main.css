@@ -54,6 +54,14 @@ main img {
     max-height: 500px;
     margin: 0 auto;
 }
-p.sticky {
-    margin-top: -1em;
+hgroup {
+    margin-bottom: 1em;
+}
+hgroup > * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+hgroup > :not(:first-child):last-child {
+    font-size: 1rem;
+    color: #7b8495;
 }
