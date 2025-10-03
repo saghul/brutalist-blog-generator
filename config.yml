@@ -10,7 +10,7 @@ tagLine: "Because, often, less is more"
 srcDir: "www"
 
 # The directory where the generated files will be placed
-outputDir: "build"
+outputDir: "dist"
 
 # The public URL for the blog
 siteUrl: "https://bettercallsaghul.com/brutalist-blog-generator/"
