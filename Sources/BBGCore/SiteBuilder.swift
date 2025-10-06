@@ -2,12 +2,12 @@ import Foundation
 
 public struct SiteBuilder: Decodable {
     private static let templates = [
-        "base.html": String(decoding: Data(PackageResources.base_html), as: UTF8.self),
-        "index.html": String(decoding: Data(PackageResources.index_html), as: UTF8.self),
-        "post.html": String(decoding: Data(PackageResources.post_html), as: UTF8.self),
-        "page.html": String(decoding: Data(PackageResources.page_html), as: UTF8.self),
-        "main.css": String(decoding: Data(PackageResources.main_css), as: UTF8.self),
-        "rss.xml": String(decoding: Data(PackageResources.rss_xml), as: UTF8.self),
+        "base": String(decoding: Data(PackageResources.base_mustache), as: UTF8.self),
+        "index": String(decoding: Data(PackageResources.index_mustache), as: UTF8.self),
+        "post": String(decoding: Data(PackageResources.post_mustache), as: UTF8.self),
+        "page": String(decoding: Data(PackageResources.page_mustache), as: UTF8.self),
+        "main": String(decoding: Data(PackageResources.main_mustache), as: UTF8.self),
+        "rss": String(decoding: Data(PackageResources.rss_mustache), as: UTF8.self),
     ]
     private let templateEngine: TemplateEngine
     private let srcDir: URL
@@ -94,7 +94,7 @@ public struct SiteBuilder: Decodable {
         let outputUrl = outputDir
             .appendingPathComponent("main.css")
 
-        let finalCss = try templateEngine.renderTemplate(name: "main.css", context: [:])
+        let finalCss = try templateEngine.renderTemplate(name: "main", context: [:])
         try finalCss.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated CSS at: \(outputUrl.path)")
@@ -111,7 +111,13 @@ public struct SiteBuilder: Decodable {
             "tagLine": config.tagLine,
             "siteRoot": "",
             "siteUrl": config.siteUrl,
-            "links": config.links,
+            "links": config.links.enumerated().map { index, link in
+                return [
+                    "name": link.name,
+                    "url": link.url,
+                    "isLast": index == config.links.count - 1
+                ]
+            },
             "footer": config.footer,
             "posts": posts.map { post in
                 return [
@@ -122,7 +128,7 @@ public struct SiteBuilder: Decodable {
                 ]
             }
         ]
-        let finalHtml = try templateEngine.renderTemplate(name: "index.html", context: context)
+        let finalHtml = try templateEngine.renderTemplate(name: "index", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")
@@ -164,7 +170,7 @@ public struct SiteBuilder: Decodable {
                 "content": post.toHtml()
             ]
         ]
-        let finalHtml = try templateEngine.renderTemplate(name: "post.html", context: context)
+        let finalHtml = try templateEngine.renderTemplate(name: "post", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")
@@ -197,7 +203,7 @@ public struct SiteBuilder: Decodable {
                 "content": page.toHtml()
             ]
         ]
-        let finalHtml = try templateEngine.renderTemplate(name: "page.html", context: context)
+        let finalHtml = try templateEngine.renderTemplate(name: "page", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated HTML at: \(outputUrl.path)")
@@ -224,7 +230,7 @@ public struct SiteBuilder: Decodable {
                 ]
             }
         ]
-        let finalXml = try templateEngine.renderTemplate(name: "rss.xml", context: context)
+        let finalXml = try templateEngine.renderTemplate(name: "rss", context: context)
         try finalXml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated RSS at: \(outputUrl.path)")

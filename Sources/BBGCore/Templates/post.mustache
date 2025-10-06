@@ -1,0 +1,18 @@
+{{<base}}
+{{$title}}{{post.title}} | {{title}}{{/title}}
+
+{{$content}}
+
+<main>
+    <hgroup>
+        <h1>{{post.title}}</h1>
+        <p><time datetime="{{post.date}}">{{post.formattedDate}}</time></p>
+    </hgroup>
+
+    {{{post.content}}}
+
+    <a href="../">↩ Back</a>
+</main>
+
+{{/content}}
+{{/base}}
