@@ -10,8 +10,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.6.1"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "6.1.0"),
-        .package(url: "https://github.com/stencilproject/Stencil.git", branch: "master"),
         .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.7.0"),
+        .package(url: "https://github.com/swiftstencil/swiftpm-stencil.git", from: "0.15.2"),
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.10.0"),
     ],
     targets: [
@@ -27,7 +27,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Markdown", package: "swift-markdown"),
                 .product(name: "Yams", package: "Yams"),
-                .product(name: "Stencil", package: "Stencil"),
+                .product(name: "Stencil", package: "swiftpm-stencil"),
                 .product(name: "Hummingbird", package: "hummingbird"),
             ],
             resources: [
