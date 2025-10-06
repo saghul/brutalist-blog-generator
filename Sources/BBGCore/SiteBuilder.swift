@@ -100,28 +100,32 @@ public struct SiteBuilder: Decodable {
         print("Successfully generated CSS at: \(outputUrl.path)")
     }
 
+    private func baseContext(siteRoot: String) -> [String: Any] {
+        return [
+            "title": config.title,
+            "tagLine": config.tagLine,
+            "siteRoot": siteRoot,
+            "siteUrl": config.siteUrl,
+            "links": config.links,
+            "footer": config.footer,
+        ]
+    }
+
     private func processIndex(posts: [Document]) throws {
         let outputUrl = outputDir
             .appendingPathComponent("index.html")
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let context: [String : Any] = [
-            "title": config.title,
-            "tagLine": config.tagLine,
-            "siteRoot": "",
-            "siteUrl": config.siteUrl,
-            "links": config.links,
-            "footer": config.footer,
-            "posts": posts.map { post in
-                return [
-                    "title": post.title,
-                    "date": post.date,
-                    "formattedDate": dateFormatter.string(from: post.date),
-                    "url": "posts/" + post.fileName,
-                ]
-            }
-        ]
+        var context = baseContext(siteRoot: "")
+        context["posts"] = posts.map { post in
+            return [
+                "title": post.title,
+                "date": post.date,
+                "formattedDate": dateFormatter.string(from: post.date),
+                "url": "posts/" + post.fileName,
+            ]
+        }
         let finalHtml = try templateEngine.renderTemplate(name: "index", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
@@ -151,19 +155,12 @@ public struct SiteBuilder: Decodable {
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let context: [String : Any] = [
-            "title": config.title,
-            "tagLine": config.tagLine,
-            "siteRoot": "../",
-            "siteUrl": config.siteUrl,
-            "footer": config.footer,
-            "links": config.links,
-            "post": [
-                "title": post.title,
-                "date": post.date,
-                "formattedDate": dateFormatter.string(from: post.date),
-                "content": post.toHtml()
-            ]
+        var context = baseContext(siteRoot: "../")
+        context["post"] = [
+            "title": post.title,
+            "date": post.date,
+            "formattedDate": dateFormatter.string(from: post.date),
+            "content": post.toHtml()
         ]
         let finalHtml = try templateEngine.renderTemplate(name: "post", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
@@ -187,17 +184,10 @@ public struct SiteBuilder: Decodable {
         let outputUrl = outputPagesDir
             .appendingPathComponent(String(format: "%@.html", page.slug))
 
-        let context: [String : Any] = [
-            "title": config.title,
-            "tagLine": config.tagLine,
-            "siteRoot": "../",
-            "siteUrl": config.siteUrl,
-            "footer": config.footer,
-            "links": config.links,
-            "page": [
-                "title": page.title,
-                "content": page.toHtml()
-            ]
+        var context = baseContext(siteRoot: "../")
+        context["page"] = [
+            "title": page.title,
+            "content": page.toHtml()
         ]
         let finalHtml = try templateEngine.renderTemplate(name: "page", context: context)
         try finalHtml.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
