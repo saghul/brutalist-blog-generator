@@ -1,17 +1,26 @@
 import Foundation
-import Stencil
+import Mustache
 
 struct TemplateEngine {
-    private let environment: Environment
-    private let loader: DictionaryLoader
+    private var library: MustacheLibrary
 
     init(templates: [String: String]) {
-        loader = DictionaryLoader(templates: templates)
-        environment = Environment(loader: loader)
+        library = MustacheLibrary()
+
+        // Register all templates in the library
+        for (name, content) in templates {
+            try! library.register(content, named: name)
+        }
     }
 
     func renderTemplate(name: String, context: [String: Any]) throws -> String {
-        let template = try environment.loadTemplate(name: name)
-        return try template.render(context)
+        guard let output = library.render(context, withTemplate: name) else {
+            throw TemplateError.renderFailed(name: name)
+        }
+        return output
     }
+}
+
+enum TemplateError: Error {
+    case renderFailed(name: String)
 }

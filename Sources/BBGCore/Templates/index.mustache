@@ -1,0 +1,22 @@
+{{<base}}
+{{$content}}
+
+<nav>
+    {{#links}}
+        <a href="{{url}}">{{name}}</a>{{^isLast}} &mdash;{{/isLast}}
+    {{/links}}
+</nav>
+
+<main>
+    <h1>Posts</h1>
+    <p>
+        <ul>
+            {{#posts}}
+              <li><a href="{{url}}">{{title}}</a> &mdash; <time datetime="{{date}}"><i>{{formattedDate}}</i></time></li>
+            {{/posts}}
+        </ul>
+    </p>
+</main>
+
+{{/content}}
+{{/base}}

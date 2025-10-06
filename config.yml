@@ -13,7 +13,7 @@ srcDir: "www"
 outputDir: "dist"
 
 # The public URL for the blog
-siteUrl: "https://bettercallsaghul.com/brutalist-blog-generator/"
+siteUrl: "https://bettercallsaghul.com/brutalist-blog-generator"
 
 # Links for the index page
 links:

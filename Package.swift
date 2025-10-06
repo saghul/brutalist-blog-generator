@@ -9,10 +9,10 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.6.1"),
+        .package(url: "https://github.com/hummingbird-project/swift-mustache.git", from: "2.0.1"),
+        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.16.0"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "6.1.0"),
         .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.7.0"),
-        .package(url: "https://github.com/swiftstencil/swiftpm-stencil.git", from: "0.15.2"),
-        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.16.0"),
     ],
     targets: [
         .executableTarget(
@@ -27,16 +27,16 @@ let package = Package(
             dependencies: [
                 .product(name: "Markdown", package: "swift-markdown"),
                 .product(name: "Yams", package: "Yams"),
-                .product(name: "Stencil", package: "swiftpm-stencil"),
+                .product(name: "Mustache", package: "swift-mustache"),
                 .product(name: "Hummingbird", package: "hummingbird"),
             ],
             resources: [
-                .embedInCode("Templates/base.html"),
-                .embedInCode("Templates/index.html"),
-                .embedInCode("Templates/post.html"),
-                .embedInCode("Templates/page.html"),
-                .embedInCode("Templates/main.css"),
-                .embedInCode("Templates/rss.xml"),
+                .embedInCode("Templates/base.mustache"),
+                .embedInCode("Templates/index.mustache"),
+                .embedInCode("Templates/post.mustache"),
+                .embedInCode("Templates/page.mustache"),
+                .embedInCode("Templates/main.mustache"),
+                .embedInCode("Templates/rss.mustache"),
             ]
         ),
         .testTarget(

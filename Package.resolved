@@ -1,5 +1,5 @@
 {
-  "originHash" : "950b738ae81efa1d4c02d001b0ac710b4e3b8b1fe653cf518d5e23d09f29f89a",
+  "originHash" : "eee42838d07a86d6c0b074bbbc92403635cc48b0cc90a565e4222eb14b888db0",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -17,15 +17,6 @@
       "state" : {
         "revision" : "3ae359b1bb1e72378ed43b59fdcd4d44cac5d7a4",
         "version" : "2.16.0"
-      }
-    },
-    {
-      "identity" : "spectre",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kylef/Spectre.git",
-      "state" : {
-        "revision" : "26cc5e9ae0947092c7139ef7ba612e34646086c7",
-        "version" : "0.10.1"
       }
     },
     {
@@ -137,6 +128,15 @@
       }
     },
     {
+      "identity" : "swift-mustache",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hummingbird-project/swift-mustache.git",
+      "state" : {
+        "revision" : "534f9f9e60ccc1ecc947cababb71c5f91497f4a2",
+        "version" : "2.0.1"
+      }
+    },
+    {
       "identity" : "swift-nio",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
@@ -215,24 +215,6 @@
       "state" : {
         "revision" : "a34201439c74b53f0fd71ef11741af7e7caf01e1",
         "version" : "1.4.2"
-      }
-    },
-    {
-      "identity" : "swiftpm-pathkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/astzweig/swiftpm-pathkit.git",
-      "state" : {
-        "revision" : "5d164c34f35fa7241d77357e965acde80efcb6d9",
-        "version" : "1.5.0"
-      }
-    },
-    {
-      "identity" : "swiftpm-stencil",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftstencil/swiftpm-stencil.git",
-      "state" : {
-        "revision" : "02f61d55a47b2c247b27e213b23bab116b6399ad",
-        "version" : "0.15.2"
       }
     },
     {
