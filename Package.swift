@@ -12,7 +12,7 @@ let package = Package(
         .package(url: "https://github.com/jpsim/Yams.git", from: "6.1.0"),
         .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.7.0"),
         .package(url: "https://github.com/swiftstencil/swiftpm-stencil.git", from: "0.15.2"),
-        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.10.0"),
+        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.16.0"),
     ],
     targets: [
         .executableTarget(
