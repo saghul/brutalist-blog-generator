@@ -14,6 +14,13 @@
             <h1>{{title}}</h1>
             <p>{{tagLine}}</p>
         </hgroup>
+        <nav>
+            <ul>
+                {{#links}}
+                    <li><a href="{{url}}">{{name}}</a></li>
+                {{/links}}
+            </ul>
+        </nav>
         <hr />
     </header>
     {{$content}}{{/content}}

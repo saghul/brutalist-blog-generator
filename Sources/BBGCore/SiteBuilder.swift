@@ -111,13 +111,7 @@ public struct SiteBuilder: Decodable {
             "tagLine": config.tagLine,
             "siteRoot": "",
             "siteUrl": config.siteUrl,
-            "links": config.links.enumerated().map { index, link in
-                return [
-                    "name": link.name,
-                    "url": link.url,
-                    "isLast": index == config.links.count - 1
-                ]
-            },
+            "links": config.links,
             "footer": config.footer,
             "posts": posts.map { post in
                 return [
@@ -163,6 +157,7 @@ public struct SiteBuilder: Decodable {
             "siteRoot": "../",
             "siteUrl": config.siteUrl,
             "footer": config.footer,
+            "links": config.links,
             "post": [
                 "title": post.title,
                 "date": post.date,
@@ -198,6 +193,7 @@ public struct SiteBuilder: Decodable {
             "siteRoot": "../",
             "siteUrl": config.siteUrl,
             "footer": config.footer,
+            "links": config.links,
             "page": [
                 "title": page.title,
                 "content": page.toHtml()
