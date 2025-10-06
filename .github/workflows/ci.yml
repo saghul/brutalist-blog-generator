@@ -5,18 +5,25 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+  build-macos:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: swift-actions/setup-swift@v2
         with:
           swift-version: "6.0.2"
       - run: swift --version
+      - run: make
+      - run: make test
+      - run: make release
+      - run: .build/release/bbg build
+  build-linux:
+    runs-on: ubuntu-latest
+    container: swift:6.0-bookworm
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift --version
+      - run: apt update && apt install -y build-essential make
       - run: make
       - run: make test
       - run: make release
