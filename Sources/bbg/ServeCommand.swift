@@ -18,7 +18,7 @@ struct ServeCommand: AsyncParsableCommand {
     private var builder: SiteBuilder!
 
     mutating func run() async throws {
-        builder = SiteBuilder()
+        builder = SiteBuilder(devSiteUrl: "http://\(hostname):\(port)")
         try builder.build()
 
         #if os(macOS) || os(Linux)

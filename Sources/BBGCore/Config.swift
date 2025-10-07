@@ -1,3 +1,4 @@
+import Foundation
 import Yams
 
 public struct ThemeColors: Sendable {
@@ -51,6 +52,17 @@ public struct Config {
     public let theme: ThemeConfig
     public let defaultTheme: String
 
+    public var basePath: String {
+        guard let url = URL(string: siteUrl) else {
+            return "/"
+        }
+        let path = url.path
+        if path.isEmpty || path == "/" {
+            return "/"
+        }
+        return path.hasSuffix("/") ? path : path + "/"
+    }
+
     private init(title: String? = nil,
                  tagLine: String? = nil,
                  srcDir: String? = nil,
@@ -69,6 +81,20 @@ public struct Config {
         self.footer = footer ?? ""
         self.theme = theme ?? .default
         self.defaultTheme = defaultTheme ?? "auto"
+    }
+
+    public func withSiteUrl(_ newSiteUrl: String) -> Config {
+        return Config(
+            title: self.title,
+            tagLine: self.tagLine,
+            srcDir: self.srcDir,
+            outputDir: self.outputDir,
+            siteUrl: newSiteUrl,
+            links: self.links,
+            footer: self.footer,
+            theme: self.theme,
+            defaultTheme: self.defaultTheme
+        )
     }
 
     public static func load(from path: String) -> Config {

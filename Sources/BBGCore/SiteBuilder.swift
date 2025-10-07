@@ -20,8 +20,12 @@ public struct SiteBuilder: Decodable {
 
     public let config: Config
 
-    public init() {
-        config = Config.load(from: "config.yml")
+    public init(devSiteUrl: String? = nil) {
+        var loadedConfig = Config.load(from: "config.yml")
+        if let devSiteUrl = devSiteUrl {
+            loadedConfig = loadedConfig.withSiteUrl(devSiteUrl)
+        }
+        config = loadedConfig
         templateEngine = TemplateEngine(templates: SiteBuilder.templates)
         srcDir = URL(fileURLWithPath: config.srcDir)
         postsDir = srcDir.appendingPathComponent("posts")
@@ -130,6 +134,7 @@ public struct SiteBuilder: Decodable {
             "tagLine": config.tagLine,
             "siteRoot": siteRoot,
             "siteUrl": config.siteUrl,
+            "basePath": config.basePath,
             "links": config.links,
             "footer": config.footer,
             "defaultTheme": config.defaultTheme,
