@@ -3,13 +3,14 @@
 
 <main>
     <h1>Posts</h1>
+
+    {{#posts}}
     <p>
-        <ul>
-            {{#posts}}
-              <li><a href="{{url}}">{{title}}</a> &mdash; <time datetime="{{date}}"><i>{{formattedDate}}</i></time></li>
-            {{/posts}}
-        </ul>
+        <pre>{{formattedDate}}</pre>
+        <h3><a href="{{url}}">{{title}}</a></h3>
     </p>
+    {{/posts}}
+
 </main>
 
 {{/content}}
