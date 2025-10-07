@@ -6,7 +6,7 @@ enum DocumentError: Error {
     case invalidSlug
 }
 
-struct Document {
+public struct Document {
     private let content: Markdown.Document
     private let metadata: DocumentMetadata
     private let _title: String
@@ -98,7 +98,7 @@ extension Document {
 
     private static let slugSafeCharacters = CharacterSet(charactersIn: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
 
-    static func slugify(_ string: String) -> String? {
+    public static func slugify(_ string: String) -> String? {
         // Adapted from: https://github.com/twostraws/SwiftSlug
 
         var result: String? = nil

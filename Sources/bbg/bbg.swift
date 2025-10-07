@@ -9,6 +9,7 @@ struct BBG: AsyncParsableCommand {
             InitCommand.self,
             BuildCommand.self,
             ServeCommand.self,
+            NewCommand.self,
         ]
     )
 }
