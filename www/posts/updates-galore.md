@@ -67,7 +67,7 @@ theme:
     secondaryText: "#57606a"
   dark:
     background: "#0d1117"
-    text: "#e6edf3"
+    text: "#d9d9d9"
     link: "#58a6ff"
     codeBg: "#161b22"
     border: "#30363d"
