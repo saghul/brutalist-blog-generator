@@ -211,6 +211,47 @@ final class DocumentTests: XCTestCase {
         XCTAssertTrue(html.contains("<em>italic</em>"))
     }
 
+    func testHtmlEscapingInCodeBlocks() throws {
+        // Given
+        let content = """
+        ---
+        date: "2023-01-15T12:00:00Z"
+        title: "HTML Escaping Test"
+        ---
+
+        Here's some HTML code:
+
+        ```html
+        <div class="container">
+            <p>Hello & goodbye</p>
+            <a href="test.html">Link</a>
+        </div>
+        ```
+
+        And some inline code with HTML: `<span>test</span>`
+        """
+
+        let tempPath = createTempFile(content: content)
+
+        // When
+        let document = try Document.parse(path: tempPath)
+        let html = document.toHtml()
+
+        // Then
+        // Verify HTML tags in code blocks are escaped
+        XCTAssertTrue(html.contains("&lt;div class=&quot;container&quot;&gt;"))
+        XCTAssertTrue(html.contains("&lt;p&gt;Hello &amp; goodbye&lt;/p&gt;"))
+        XCTAssertTrue(html.contains("&lt;a href=&quot;test.html&quot;&gt;Link&lt;/a&gt;"))
+        XCTAssertTrue(html.contains("&lt;/div&gt;"))
+
+        // Verify the code block still has proper structure
+        XCTAssertTrue(html.contains("<pre><code"))
+        XCTAssertTrue(html.contains("</code></pre>"))
+
+        // Verify language class is added
+        XCTAssertTrue(html.contains("class=\"language-html\""))
+    }
+
     func testSlugify() {
         // Test basic slugification
         XCTAssertEqual(Document.slugify("Hello World"), "hello-world")

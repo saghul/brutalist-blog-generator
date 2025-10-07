@@ -13,7 +13,8 @@ public struct Document {
     private let _slug: String
 
     private init(content: Markdown.Document, metadata: DocumentMetadata, title: String, slug: String) {
-        self.content = content
+        var rewriter = CustomRewriter()
+        self.content = rewriter.visit(content) as! Markdown.Document
         self.metadata = metadata
         self._title = title
         self._slug = slug
@@ -43,7 +44,7 @@ public struct Document {
             throw DocumentError.invalidSlug
         }
 
-        return Document(content: document.deleteTitle(), metadata: metadata, title: title, slug: validSlug)
+        return Document(content: document, metadata: metadata, title: title, slug: validSlug)
     }
 
     func toHtml() -> String {
