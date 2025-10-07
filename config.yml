@@ -27,7 +27,7 @@ links:
     url: "rss.xml"
 
   - name: "About"
-    url: "pages/about.html"
+    url: "/pages/about.html"
 
 # Footer for all pages
 footer: "© Saúl Ibarra Corretgé"
