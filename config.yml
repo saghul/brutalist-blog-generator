@@ -17,6 +17,9 @@ siteUrl: "https://bettercallsaghul.com/brutalist-blog-generator"
 
 # Links for the index page
 links:
+  - name: "Home"
+    url: "/"
+
   - name: "GitHub"
     url: "https://github.com/saghul/brutalist-blog-generator"
 
@@ -27,4 +30,4 @@ links:
     url: "pages/about.html"
 
 # Footer for all pages
-footer: "© 2025 Saúl Ibarra Corretgé"
+footer: "© Saúl Ibarra Corretgé"
