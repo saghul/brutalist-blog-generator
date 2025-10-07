@@ -2,13 +2,15 @@
 {{$content}}
 
 <main>
-    <h1>Posts</h1>
+    <hgroup>
+        <h1>Posts</h1>
+    </hgroup>
 
     {{#posts}}
-    <p>
-        <pre>{{formattedDate}}</pre>
+    <hgroup>
         <h3><a href="{{url}}">{{title}}</a></h3>
-    </p>
+        <p>{{formattedDate}}</p>
+    </hgroup>
     {{/posts}}
 
 </main>
