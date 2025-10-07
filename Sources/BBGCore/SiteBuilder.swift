@@ -90,11 +90,35 @@ public struct SiteBuilder: Decodable {
         return docs
     }
 
+    private func themeContext() -> [String: Any] {
+        return [
+            "light": [
+                "background": config.theme.light.background,
+                "text": config.theme.light.text,
+                "link": config.theme.light.link,
+                "codeBg": config.theme.light.codeBg,
+                "border": config.theme.light.border,
+                "codeBorderLeft": config.theme.light.codeBorderLeft,
+                "secondaryText": config.theme.light.secondaryText,
+            ],
+            "dark": [
+                "background": config.theme.dark.background,
+                "text": config.theme.dark.text,
+                "link": config.theme.dark.link,
+                "codeBg": config.theme.dark.codeBg,
+                "border": config.theme.dark.border,
+                "codeBorderLeft": config.theme.dark.codeBorderLeft,
+                "secondaryText": config.theme.dark.secondaryText,
+            ]
+        ]
+    }
+
     private func processCss() throws {
         let outputUrl = outputDir
             .appendingPathComponent("main.css")
 
-        let finalCss = try templateEngine.renderTemplate(name: "main", context: [:])
+        let context: [String: Any] = ["theme": themeContext()]
+        let finalCss = try templateEngine.renderTemplate(name: "main", context: context)
         try finalCss.write(toFile: outputUrl.path, atomically: true, encoding: .utf8)
 
         print("Successfully generated CSS at: \(outputUrl.path)")
@@ -108,6 +132,8 @@ public struct SiteBuilder: Decodable {
             "siteUrl": config.siteUrl,
             "links": config.links,
             "footer": config.footer,
+            "defaultTheme": config.defaultTheme,
+            "theme": themeContext()
         ]
     }
 

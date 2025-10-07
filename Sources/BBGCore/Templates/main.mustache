@@ -1,12 +1,32 @@
+[data-theme="light"] {
+    --bbg-background: {{theme.light.background}};
+    --bbg-text: {{theme.light.text}};
+    --bbg-link: {{theme.light.link}};
+    --bbg-code-bg: {{theme.light.codeBg}};
+    --bbg-border: {{theme.light.border}};
+    --bbg-code-border-left: {{theme.light.codeBorderLeft}};
+    --bbg-secondary-text: {{theme.light.secondaryText}};
+}
+
+[data-theme="dark"] {
+    --bbg-background: {{theme.dark.background}};
+    --bbg-text: {{theme.dark.text}};
+    --bbg-link: {{theme.dark.link}};
+    --bbg-code-bg: {{theme.dark.codeBg}};
+    --bbg-border: {{theme.dark.border}};
+    --bbg-code-border-left: {{theme.dark.codeBorderLeft}};
+    --bbg-secondary-text: {{theme.dark.secondaryText}};
+}
+
 body {
-    background-color: #FAFAFA;
+    background-color: var(--bbg-background);
+    color: var(--bbg-text);
     margin: 0 auto;
     max-width: 950px;
     min-height: 100vh;
     line-height: 1.4;
     font-family: Open Sans,Arial;
     font-size: 16px;
-    color: #444;
     padding: 0 10px;
     display: flex;
     flex-direction: column;
@@ -19,25 +39,25 @@ li p {
     margin: 0;
 }
 blockquote {
-    border-left: 5px solid #DDD;
+    border-left: 5px solid var(--bbg-border);
     padding-left: 10px;
 }
 code {
-    background: #F4F4F4;
-    border: 1px solid #DDD;
+    background: var(--bbg-code-bg);
+    border: 1px solid var(--bbg-border);
 }
 pre {
     margin: 0;
 }
 pre code {
-    border-left: 3px solid #2B2B2B;
+    border-left: 3px solid var(--bbg-code-border-left);
     display: block;
     max-width: 100%;
     overflow: auto;
     padding-left: 10px;
 }
 a {
-    color: #07A;
+    color: var(--bbg-link);
     text-decoration: none;
 }
 header {
@@ -59,6 +79,13 @@ nav ul {
     padding: 0;
     margin: 0;
     gap: 1em;
+}
+#theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0;
 }
 footer {
     margin-top: auto;
@@ -84,7 +111,7 @@ hgroup > * {
 }
 hgroup > :not(:first-child):last-child {
     font-size: 1rem;
-    color: #7b8495;
+    color: var(--bbg-secondary-text);
 }
 hr {
     height: 0;

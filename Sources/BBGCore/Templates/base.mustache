@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{siteRoot}}main.css">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="{{siteUrl}}/rss.xml">
 </head>
-<body>
+<body data-theme="{{defaultTheme}}">
     <header>
         <hgroup>
             <h1>{{title}}</h1>
@@ -19,6 +19,7 @@
                 {{#links}}
                     <li><a href="{{url}}">{{name}}</a></li>
                 {{/links}}
+                <li><button id="theme-toggle" aria-label="Toggle theme">🌙</button></li>
             </ul>
         </nav>
         <hr />
@@ -29,5 +30,37 @@
             {{footer}}
         </small>
     </footer>
+    <script>
+        (function() {
+            const body = document.body;
+            const button = document.getElementById('theme-toggle');
+            const defaultTheme = body.getAttribute('data-theme');
+
+            function getInitialTheme() {
+                const saved = localStorage.getItem('theme');
+                if (saved) return saved;
+
+                if (defaultTheme === 'auto') {
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+
+                return defaultTheme;
+            }
+
+            function updateTheme(theme) {
+                body.setAttribute('data-theme', theme);
+                button.textContent = theme === 'dark' ? '☀️' : '🌙';
+                localStorage.setItem('theme', theme);
+            }
+
+            const currentTheme = getInitialTheme();
+            updateTheme(currentTheme);
+
+            button.addEventListener('click', function() {
+                const newTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                updateTheme(newTheme);
+            });
+        })();
+    </script>
 </body>
 </html>

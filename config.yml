@@ -31,3 +31,25 @@ links:
 
 # Footer for all pages
 footer: "© Saúl Ibarra Corretgé"
+
+# Theme configuration
+#theme:
+#  light:
+#    background: "#FAFAFA"
+#    text: "#24292f"
+#    link: "#0969da"
+#    codeBg: "#f6f8fa"
+#    border: "#d0d7de"
+#    codeBorderLeft: "#2b2b2b"
+#    secondaryText: "#57606a"
+#  dark:
+#    background: "#0d1117"
+#    text: "#e6edf3"
+#    link: "#58a6ff"
+#    codeBg: "#161b22"
+#    border: "#30363d"
+#    codeBorderLeft: "#6e7681"
+#    secondaryText: "#8b949e"
+
+# Default theme: "light", "dark", or "auto" (respects system preference)
+#defaultTheme: "auto"
